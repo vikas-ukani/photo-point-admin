@@ -1,0 +1,110 @@
+require("dotenv");
+
+/**
+ * Route prefix
+ */
+export const route_prefix = "/admin/";
+export const dashboardURL = "dashboard";
+/**
+ * Set Default route
+ */
+export const default_route = route_prefix + dashboardURL;
+
+/**
+ * Base URL
+ * api prefix
+ */
+
+export const baseURL =
+  process.env.API_URL ||
+  "http://127.0.0.1:8000"; 
+
+// export const baseURL = "http://192.168.0.129:1001"
+export const api_prefix = baseURL + route_prefix;
+
+/**
+ * For Listing Dynamically pagination list drop-down
+ */
+export const LIMITS = [
+  { key: "10", value: 10 },
+  { key: "25", value: 25 },
+  { key: "50", value: 50 },
+  { key: "100", value: 100 },
+  { key: "150", value: 150 },
+  { key: "300", value: 300 },
+  { key: "500", value: 500 }
+];
+
+/**
+ * All Module APi Collections
+ */
+export const ApiCollections = {
+  getImage: { method: "get", url: baseURL },
+
+  login: { method: "POST", url: api_prefix + "login" },
+  forgorPassword: { method: "POST", url: api_prefix + "forgot-password" },
+  changePassword: { method: "POST", url: api_prefix + "change-possword" },
+  users_listing: { method: "GET", url: api_prefix + "users-list" },
+  getUserById: { method: "GET", url: api_prefix + "user/" },
+  update_user: {
+    method: "post",
+    url: api_prefix + "user-update",
+    headers: { headers: { "content-type": "multipart/form-data" } }
+  },
+  update_profile: {
+    method: "post",
+    url: api_prefix + "user-profile"
+  },
+  upload_image: {
+    method: "post",
+    url: api_prefix + "upload",
+    headers: {
+      headers: {
+        "Content-Type": "multipart/form-data"
+      }
+    }
+  },
+  users_status_change: {
+    method: "delete",
+    url: api_prefix + "users-status-change"
+  },
+  get_users_count_by_type: {
+    method: "get",
+    url: api_prefix + "get-user-count-by-type"
+  },
+  /** Masters Countries countries */
+  countries_listing: { method: "POST", url: api_prefix + "countries-list" },
+  create_countries: { method: "POST", url: api_prefix + "countries-create" },
+  update_countries: { method: "put", url: api_prefix + "countries-update/" },
+  get_countries: { method: "GET", url: api_prefix + "countries-show/" },
+  delete_countries: { method: "delete", url: api_prefix + "countries-delete/" },
+  countries_status_change: {
+    method: "delete",
+    url: api_prefix + "countries-status-change"
+  },
+  countries_delete_multiple: {
+    method: "POST",
+    url: api_prefix + "countries-status-delete-many"
+  },
+
+  /** categories api */
+  categories_list: { method: "POST", url: api_prefix + "categories-list" },
+
+  /** products apis */
+  products_list: { method: "POST", url: api_prefix + "products-list" },
+  products_create: { method: "POST", url: api_prefix + "products-create" },
+  products_get: { method: "GET", url: api_prefix + "products-show/" },
+  products_update: { method: "POST", url: api_prefix + "products-update/" },
+  products_delete_multiple: {
+    method: "delete",
+    url: api_prefix + "products-delete-multiple"
+  },
+  products_delete: {
+    method: "get",
+    url: api_prefix + "products-delete/"
+  },
+  products_update_status_change: {
+    method: "POST",
+    url: api_prefix + "products-status-change"
+  }
+};
