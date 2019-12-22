@@ -6,7 +6,7 @@ module.exports = {
   //   ? '/photo-point-admin/'
   //   : '/',
   devServer: {
-    proxy: 'http://127.0.0.1:8000',
+    proxy: 'http://comedyclassroom.com',
     // proxy: 'http://192.168.0.133:1001/',
   }
 }

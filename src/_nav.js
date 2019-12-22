@@ -55,7 +55,14 @@ export default {
         text: "NEW"
       },
       sequence: 14
-    }
+    },
+
+    {
+      name: "Complaint Categories",
+      url: "/complaint-categories",
+      icon: "icon-location-pin",
+      sequence: 20
+    },
     // {
     //   title: true,
     //   name: "Masters"

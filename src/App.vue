@@ -28,4 +28,6 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
 // Import Main styles for this application
 @import "./assets/scss/style";
+
+@import "~pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 </style>

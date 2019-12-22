@@ -1,7 +1,7 @@
 <template >
   <div class="animated fadeIn">
     <div class>
-      <page-header
+      <PageHeader
         :title="$route.name"
         :titleCounter="totalCount"
         :is_show_serach="true"
@@ -10,7 +10,8 @@
         :selected_ids="selectedIds"
         :is_show_model="true"
         :search="search"
-      ></page-header>
+      ></PageHeader>
+
       <!-- :add_route="$route.path + '-add'" -->
       <div class="card card-body" v-if="lists && lists.length">
         <table
@@ -24,18 +25,14 @@
                   v-model="allSelectedData"
                 >#</b-form-checkbox>
               </th>
-              <th class="text-capitalize">Image</th>
-              <th class="text-capitalize">Category</th>
               <th class="text-capitalize">Name</th>
-              <th class="text-capitalize">Price</th>
-              <th class="text-capitalize">Size</th>
-              <th class="text-capitalize">Size Number</th>
-              <th class="text-capitalize">Descriptions</th>
+              <th class="text-capitalize">Code</th>
+              <!-- <th class="text-capitalize">Country code</th> -->
               <th class="text-capitalize">Status</th>
               <th class="text-capitalize">Actions</th>
             </tr>
           </thead>
-          <tbody v-if="lists && lists.length">
+          <tbody v-if="lists &&  lists.length">
             <tr v-for="(list, index) in lists" :key="index">
               <td>
                 <b-form-checkbox
@@ -43,35 +40,16 @@
                   v-model="list.is_selected"
                 >{{ ((page * limit) - (limit - (index + 1)) ) }}</b-form-checkbox>
               </td>
-
-              <td>
-                <!-- {{ baseURL + list.image }} -->
-                <img
-                  v-bind:src=" list.image"
-                  v-bind:alt="list.name"
-                  height="50"
-                  width="50"
-                  class="img-fluid"
-                />
-              </td>
-              <td>
-                <small class="font-bold">{{ list.category.name || '-' }}</small>
-              </td>
               <td>
                 <small class="font-bold">{{ list.name || '-' }}</small>
               </td>
               <td>
-                <small class="font-bold">{{ (list.price )|| '-' }}</small>
+                <small class="font-bold">{{ (list.code )|| '-' }}</small>
               </td>
-              <td>
-                <small class="font-bold">{{ (list.size )|| '-' }}</small>
-              </td>
-              <td>
-                <small class="font-bold">{{ (list.color )|| '-' }}</small>
-              </td>
-              <td>
-                <small class="font-bold">{{ (list.description )|| '-' }}</small>
-              </td>
+              <!-- <td>
+                <small class="font-bold">{{ (list.country_code )|| '-' }}</small>
+              </td>-->
+
               <td>
                 <span class="p-0 m-0" @click="statusChange('is_active', !list.is_active, list.id)">
                   <switches
@@ -91,10 +69,9 @@
                 >
                   <i class="fa fa-edit"></i>
                 </a>
-
                 <a
                   v-b-tooltip.hover.left="'Delete ' + list.name"
-                  class="link text-danger p-0 ml-1"
+                  class="link text-danger p-0"
                   @click="deleteConfirmation(list)"
                 >
                   <i class="fa fa-trash"></i>
@@ -107,9 +84,9 @@
           <span class="col-xl-4 col-sm-4 col-md-4 col-xs-4 pull-left">
             <div class="form-group">
               <div class="input-group">
-                <span class="input-group-addon">
-                  <b>Limit:</b>
-                </span>
+                <div class="input-group-addon align-self-center">
+                  <b class="mr-1">Limit:</b>
+                </div>
                 <select
                   class="form-control col-md-4 col-lg-4 col-sm-4"
                   @change="changePageLimits($event)"
@@ -132,6 +109,7 @@
               </div>
             </div>
           </span>
+
           <span class="col-xl-4 col-sm-4 col-md-4 col-xs-4">
             Showing
             <span class="text-primary">{{ ((page * limit) - (limit - 1) ) }}</span>
@@ -163,8 +141,6 @@
     </div>
 
     <b-modal
-      size="lg"
-      id="modal-lg"
       :title="((  detail &&  detail.id  ) ? 'Edit ' : 'Add '  )  + $route.name   "
       v-model="showModal"
       okTitle="Save"
@@ -175,198 +151,101 @@
       @close="clearAllData(); showModal = false"
       @ok="submitData"
     >
-      <form method="post" enctype="multipart/form-data" novalidate name="addEditForm" class="row">
-        <div class="input-group mb-3 col-md-6">
-          <label for="name" class="text-capitalize ml-3">
-            name
-            <small
-              :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              class="form-control"
-              placeholder="Enter name"
-              v-model="detail.name"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('name') }"
-            />
+      <form method="post" novalidate name="addEditForm">
+        <div class="col-md-12">
+          <div class="input-group mb-3">
+            <label for="name" class="text-capitalize ml-3">
+              name
+              <small
+                :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+              >*</small>
+            </label>
+            <div class="input-group col-md-12">
+              <input
+                type="text"
+                id="name"
+                name="name"
+                required
+                class="form-control"
+                placeholder="Enter name"
+                v-model="detail.name"
+                v-validate="'required'"
+                :class="{ 'is-invalid': errors.has('name') }"
+              />
+            </div>
+            <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>
           </div>
-          <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>
-        </div>
 
-        <div class="input-group mb-3 col-md-6">
-          <label for="category" class="text-capitalize ml-3">
-            category 
-            <small
-              :class="!detail.category || errors.has('category') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <!--  @change="changePageLimits($event)" -->
-            <select class="form-control" v-model="detail.category_id">
-              <option
-                v-show="category_list && category_list.length"
-                v-for="(list, index) in category_list"
-                :key="index"
-                :value="list.id"
-              >{{list.name}}</option>
-
-              <option
-                selected="true"
-                v-if="!category_list || !category_list.length"
-              >No any category found</option>
-            </select>
+          <div class="input-group mb-3">
+            <label for="code" class="text-capitalize ml-3">
+              code
+              <small
+                :class="!detail.code || errors.has('code') ? 'text-danger' : 'text-success' "
+              >*</small>
+            </label>
+            <div class="input-group col-md-12">
+              <input
+                type="text"
+                id="code"
+                name="code"
+                v-model="detail.code"
+                required="required"
+                placeholder="Enter code"
+                class="form-control"
+                aria-required="true"
+                aria-invalid="true"
+                v-validate="'required'"
+                :class="{ 'is-invalid': errors.has('code') }"
+              />
+            </div>
+            <small v-if="errors.has('code')" class="text-danger mt-1">{{ errors.first('code') }}</small>
           </div>
-          <small
-            v-if="errors.has('category')"
-            class="text-danger mt-1"
-          >{{ errors.first('category') }}</small>
-        </div>
 
-        <div class="input-group mb-3 col-md-6">
-          <label for="price" class="text-capitalize ml-3">
-            price
+          <!-- <div class="input-group mb-3">
+            <label for="country_code" class="text-capitalize ml-3">
+              Country code
+              <small
+                :class="!detail.country_code || errors.has('country_code') ? 'text-danger' : 'text-success' "
+              >*</small>
+            </label>
+            <div class="input-group col-md-12">
+              <input
+                type="text"
+                id="country_code"
+                name="country_code"
+                v-model="detail.country_code"
+                required="required"
+                placeholder="Enter country code"
+                class="form-control"
+                aria-required="true"
+                aria-invalid="true"
+                v-validate="'required'"
+                :class="{ 'is-invalid': errors.has('country_code') }"
+              />
+            </div>
             <small
-              :class="!detail.price || errors.has('price') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="price"
-              name="price"
-              required
-              class="form-control"
-              placeholder="Enter price"
-              v-model="detail.price"
-              v-validate="'required|numeric'"
-              :class="{ 'is-invalid': errors.has('price') }"
-            />
-          </div>
-          <small v-if="errors.has('price')" class="text-danger mt-1">{{ errors.first('price') }}</small>
-        </div>
+              v-if="errors.has('country_code')"
+              class="text-danger mt-1"
+            >{{ errors.first('country_code') }}</small>
+          </div>-->
 
-        <div class="input-group mb-3 col-md-6">
-          <label for="size" class="text-capitalize ml-3">
-            size
-            <small
-              :class="!detail.size || errors.has('size') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="size"
-              name="size"
-              required
-              class="form-control"
-              placeholder="Enter size "
-              v-model="detail.size"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('size') }"
-            />
-          </div>
-          <small v-if="errors.has('size')" class="text-danger mt-1">{{ errors.first('size') }}</small>
-        </div>
-
-        <div class="input-group mb-3 col-md-6">
-          <label for="color" class="text-capitalize ml-3">
-            size number
-            <small
-              :class="!detail.color || errors.has('color') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="color"
-              name="color"
-              required
-              class="form-control"
-              placeholder="Enter size number (Ex. 14.5-15)"
-              v-model="detail.color"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('color') }"
-            />
-          </div>
-          <small v-if="errors.has('color')" class="text-danger mt-1">{{ errors.first('color') }}</small>
-        </div>
-
-        <div class="input-group mb-3 col-md-12">
-          <label for="description" class="text-capitalize ml-3">
-            Description
-            <small
-              :class="!detail.description || errors.has('description') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <textarea
-              class="form-control"
-              required
-              placeholder="Enter description"
-              name="description"
-              id="description"
-              cols="20"
-              rows="5"
-              v-model="detail.description"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('description') }"
-            ></textarea>
-          </div>
-          <small
-            v-if="errors.has('description')"
-            class="text-danger mt-1"
-          >{{ errors.first('description') }}</small>
-        </div>
-
-        <div class="input-group">
-          <div class="input-group col-md-12">
-            <img
-              v-if="detail.image && detail.id"
-              v-bind:src="detail.image"
-              class="img-thumbnail"
-              width="120"
-              height="150"
-            />
-            <div class="input-group pull-left">
-              <label class="btn btn-primary btn-sm" for="file-upload">
-                <input
-                  id="file-upload"
-                  type="file"
-                  class="d-none"
-                  v-on:change="handleFileUpload"
-                  accept="image/png, image/jpeg, image/gif"
-                />
-                Upload Product Image
-              </label>
+          <div class="input-group mb-3">
+            <label for="name" class="text-capitalize ml-3">
+              Active
+              <!-- <small
+                          :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+              >*</small>-->
+            </label>
+            <div class="input-group col-md-12">
+              <switches
+                v-model="detail.is_active"
+                v-bind:label="detail.is_active == true ? 'Active' : 'Deactive'"
+                theme="bulma"
+                color="green"
+                type-bold="false"
+              ></switches>
             </div>
           </div>
-        </div>
-        <div class="input-group mb-3">
-          <label for="name" class="text-capitalize ml-3">
-            Active
-            <!-- <small
-                          :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-            >*</small>-->
-          </label>
-          <div class="input-group col-md-12">
-            <switches
-              v-model="detail.is_active"
-              v-bind:label="detail.is_active == true ? 'Active' : 'Deactive'"
-              theme="bulma"
-              color="green"
-              type-bold="false"
-            ></switches>
-          </div>
-          <!-- <small
-                        v-if="errors.has('name')"
-                        class="text-danger mt-1"
-          >{{ errors.first('name') }}</small>-->
         </div>
       </form>
     </b-modal>
@@ -375,33 +254,26 @@
 
 <script>
 import Services from "../../../../Services/apiServices";
-import { ApiCollections, LIMITS, baseURL } from "../../../../config/config";
+import { ApiCollections, LIMITS } from "../../../../config/config";
 import Switches from "vue-switches";
 import PageHeader from "../../../../components/custom/PageHeader";
-import { async } from "q";
-import apiServices from "../../../../Services/apiServices";
+import { isString } from "util";
 
 export default {
-  name: "Products",
+  name: "ActionForce",
   components: {
     Switches,
     PageHeader
   },
   data: function() {
     return {
-      baseURL: baseURL,
       allSelectedData: false,
       selectedIds: [],
-      category_list: [],
       pageLimits: [],
       detail: {
         name: "",
-        category_id: "",
-        price: "",
-        size: "",
-        color: "",
-        description: "",
-        image: "",
+        code: "",
+        country_code: "",
         is_active: true
       },
       search: PageHeader.data.search,
@@ -414,7 +286,6 @@ export default {
   },
   mounted() {
     // this.getAllList();
-    this.getCategoryList(); // categories_list
   },
   beforeMount() {
     this.limit = LIMITS[0].value;
@@ -432,10 +303,7 @@ export default {
       this.$swal
         .fire({
           title: "Are you sure?",
-          text:
-            "You want to delete selected(" +
-            this.selectedIds.length +
-            ") record!",
+          text: "You want to delete selected record!",
           type: "warning",
           showCancelButton: true,
           confirmButtonColor: "#3085d6",
@@ -446,7 +314,7 @@ export default {
           if (result.value) {
             if (this.selectedIds && this.selectedIds.length) {
               let res = await Services.call(
-                ApiCollections.products_delete_multiple
+                ApiCollections.complaint_category_delete_multiple
               ).deleteMany(request);
 
               /**
@@ -466,18 +334,6 @@ export default {
             }
           }
         });
-    },
-
-    async getCategoryList() {
-      let res = await Services.call(ApiCollections.categories_list).post({
-        is_active: true
-      });
-
-      if (res && res.success == true) {
-        this.category_list = res.data.list;
-      } else {
-        this.category_list = [];
-      }
     },
 
     changePageLimits(event) {
@@ -548,7 +404,9 @@ export default {
 
     /** get details by id */
     async getDetails(id) {
-      let res = await Services.call(ApiCollections.products_get).getOne(id);
+      let res = await Services.call(
+        ApiCollections.get_complaint_category
+      ).getOne(id);
       this.detail = res.data;
       if (res && res.success && res.success == true) {
         this.detail = res.data;
@@ -593,9 +451,9 @@ export default {
         Services.notify("e", "Record details not found");
         return false;
       }
-      let res = await Services.call(ApiCollections.products_delete).delete(
-        list.id
-      );
+      let res = await Services.call(
+        ApiCollections.delete_complaint_category
+      ).delete(list.id);
       if (res && res.success && res.success == true) {
         var index = this.$_.findIndex(this.lists, { id: list.id });
 
@@ -612,8 +470,6 @@ export default {
           list.name + " record has been deleted.",
           "success"
         );
-      } else {
-        Services.notify("e", res.message);
       }
     },
     clearAllData() {
@@ -623,48 +479,17 @@ export default {
         is_active: true
       };
     },
-    handleFileUpload(e) {
-      let input = event.target;
-      if (input.files && input.files[0]) {
-        var reader = new FileReader();
-        reader.onload = e => {
-          this.detail.image = e.target.result;
-          this.selectedFile = input.files[0];
-        };
-        reader.readAsDataURL(input.files[0]);
-      }
-    },
     async submitData() {
-      let formData = new FormData();
-      formData.append("name", this.detail.name);
-      formData.append("category_id", this.detail.category_id);
-      formData.append("price", this.detail.price);
-      formData.append("size", this.detail.size);
-      formData.append("color", this.detail.color);
-      formData.append("description", this.detail.description);
-      formData.append("is_active", this.detail.is_active);
-      // if (this.detail.image) {
-      //   formData.append("image", this.detail.image);
-      // }
-      if (this.selectedFile) {
-        formData.append("image", this.selectedFile);
-      }
-      // if (this.detail.id) {
-      //   formData.append("id", this.detail.id);
-      // }
-
       this.$Progress.start();
+
       if (this.detail && this.detail.id) {
-        var apiObject = this.$_.clone(ApiCollections.products_update);
+        var apiObject = this.$_.clone(ApiCollections.update_complaint_category);
         apiObject.url += this.detail.id;
 
-        let res = await Services.call(apiObject).post(formData);
-
+        let res = await Services.call(apiObject).update(this.detail);
         /** set update data  */
         if (res && res.success && res.success == true) {
-          var index = this.$_.findIndex(this.lists, {
-            id: this.detail.id
-          });
+          var index = this.$_.findIndex(this.lists, { id: this.detail.id });
 
           /** stop loader */
           this.$Progress.finish();
@@ -675,8 +500,6 @@ export default {
           // this.lists.slice(index, 1, this.$_.clone(res.data));
 
           this.lists[index] = this.$_.clone(res.data);
-          console.log("Updated Record", res.data, this.lists[index]);
-
           Services.notify("s", res.message);
           this.showModal = false;
           this.detail = {};
@@ -686,9 +509,9 @@ export default {
         }
       } else {
         /** create data */
-        let res = await Services.call(ApiCollections.products_create).post(
-          formData
-        );
+        let res = await Services.call(
+          ApiCollections.create_complaint_category
+        ).post(this.detail);
         /** set data  */
         if (res && res.success && res.success == true) {
           this.lists.unshift(res.data);
@@ -717,9 +540,7 @@ export default {
       /** make common request */
       var request = {
         page: this.page,
-        limit: this.limit,
-        relation: ["category"],
-        category_list: ["id", "name"]
+        limit: this.limit
       };
 
       /** if search found then send to request */
@@ -731,16 +552,13 @@ export default {
 
       /** start progress here */
       this.$Progress.start();
-
       let res = await Services.call(
-        // ApiCollections.training_activities_listing
-        ApiCollections.products_list
+        ApiCollections.complaint_category_listing
       ).post(request);
 
       /** check error or success response */
       if (res && res.success && res.success == true) {
         this.lists = res.data.list;
-
         this.totalCount = parseInt(res.data.count);
 
         if (this.lists && this.lists.length) {
@@ -767,7 +585,7 @@ export default {
       }
 
       let res = await Services.call(
-        ApiCollections.products_update_status_change
+        ApiCollections.complaint_category_status_change
       ).post(request);
 
       /** set update data  */
@@ -787,32 +605,20 @@ export default {
         this.$Progress.fail();
         Services.notify("e", res.message);
       }
-    },
-    getImageLoaded(url) {
-      return baseURL + url;
-      return false;
-      // ApiCollections.getImage.url += url;
-      let requestData = ApiCollections.getImage;
-      let mainURL = requestData.url + url;
-      requestData.url = mainURL;
-      // console.log(
-      //   "Check Url ",
-      //   requestData
-      //   // mainURL
-      //   // await Services.call(ApiCollections.getImage).get()
-      // );
-
-      // return await Services.call(requestData).get();
     }
   },
   watch: {
-    // "detail.name"(newVal) {
-    //     if (newVal) {
-    //         this.detail.code = this.$_.clone(
-    //             newVal.replace(/ /g, "_").toUpperCase()
-    //         );
-    //     }
-    // },
+    "detail.code"(newVal) {
+      if (!isString(newVal)) {
+        // Services.notify("w", "Only string value allowed");
+        return false;
+      }
+      if (newVal) {
+        this.detail.code = this.$_.clone(
+          newVal.replace(/ /g, "_").toUpperCase()
+        );
+      }
+    },
     page: function(val) {
       this.pageChangeFn(parseInt(val));
     }

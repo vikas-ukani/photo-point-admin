@@ -15,11 +15,12 @@ export const default_route = route_prefix + dashboardURL;
  * api prefix
  */
 
-export const baseURL =
-  process.env.API_URL ||
-  "http://127.0.0.1:8000"; 
+// export const baseURL =
+//   process.env.API_URL ||
+//   "http://127.0.0.1:8000";
 
-// export const baseURL = "http://192.168.0.129:1001"
+// export const baseURL = "http://localhost:1001"
+export const baseURL = "http://comedyclassroom.com"
 export const api_prefix = baseURL + route_prefix;
 
 /**
@@ -87,6 +88,23 @@ export const ApiCollections = {
     url: api_prefix + "countries-status-delete-many"
   },
 
+
+
+  /** Masters Complaint categories */
+  complaint_category_listing: { method: "POST", url: api_prefix + "complaint-category-list" },
+  create_complaint_category: { method: "POST", url: api_prefix + "complaint-category-create" },
+  update_complaint_category: { method: "put", url: api_prefix + "complaint-category-update/" },
+  get_complaint_category: { method: "GET", url: api_prefix + "complaint-category-show/" },
+  delete_complaint_category: { method: "delete", url: api_prefix + "complaint-category-delete/" },
+  complaint_category_status_change: {
+    method: "delete",
+    url: api_prefix + "complaint-category-status-change"
+  },
+  complaint_category_delete_multiple: {
+    method: "POST",
+    url: api_prefix + "complaint-category-delete-multiple"
+  },
+
   /** categories api */
   categories_list: { method: "POST", url: api_prefix + "categories-list" },
 
@@ -106,5 +124,31 @@ export const ApiCollections = {
   products_update_status_change: {
     method: "POST",
     url: api_prefix + "products-status-change"
+  },
+
+
+  /**
+   * Offer Modules
+   */
+
+  /** offers apis */
+  offers_list: { method: "POST", url: api_prefix + "offers-list" },
+  offers_create: { method: "POST", url: api_prefix + "offers-create" },
+  offers_get: { method: "GET", url: api_prefix + "offers-show/" },
+  offers_update: { method: "POST", url: api_prefix + "offers-update/" },
+  offers_delete_multiple: {
+    method: "delete",
+    url: api_prefix + "offers-delete-multiple"
+  },
+  offers_delete: {
+    method: "get",
+    url: api_prefix + "offers-delete/"
+  },
+  offers_update_status_change: {
+    method: "POST",
+    url: api_prefix + "offers-status-change"
   }
+
+
+
 };

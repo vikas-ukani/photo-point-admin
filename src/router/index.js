@@ -20,7 +20,9 @@ import Profile from "../views/admin/auth/Profile";
 
 /** Masters Components */
 import Countries from "../views/admin/Masters/Countries";
+import ComplaintCategories from "../views/admin/Masters/ComplaintCategories";
 import Products from "../views/admin/Masters/Products";
+import Offers from "../views/admin/Masters/Offers";
 // import TrainingActivities from "../views/admin/Masters/TrainingActivities";
 
 // Containers
@@ -91,9 +93,22 @@ export default new Router({
         },
 
         {
+          path: "/complaint-categories", // route_prefix +
+          name: "Complaint Categories",
+          component: ComplaintCategories,
+          beforeEnter: ifAuthenticated
+        },
+
+        {
           path: "/products", // route_prefix +
           name: "Products",
           component: Products,
+          beforeEnter: ifAuthenticated
+        },
+        {
+          path: "/offers", // route_prefix +
+          name: "Offers",
+          component: Offers,
           beforeEnter: ifAuthenticated
         },
         // {

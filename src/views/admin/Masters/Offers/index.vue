@@ -27,10 +27,10 @@
               <th class="text-capitalize">Image</th>
               <th class="text-capitalize">Category</th>
               <th class="text-capitalize">Name</th>
-              <th class="text-capitalize">Price</th>
-              <th class="text-capitalize">Size</th>
-              <th class="text-capitalize">Size Number</th>
-              <th class="text-capitalize">Descriptions</th>
+              <th class="text-capitalize">Discount</th>
+              <th class="text-capitalize">Description</th>
+              <th class="text-capitalize">Valid From</th>
+              <th class="text-capitalize">Valid To</th>
               <th class="text-capitalize">Status</th>
               <th class="text-capitalize">Actions</th>
             </tr>
@@ -55,22 +55,22 @@
                 />
               </td>
               <td>
-                <small class="font-bold">{{ list.category.name || '-' }}</small>
+                <small class="font-bold">{{ list.category_detail.name || '-' }}</small>
               </td>
               <td>
                 <small class="font-bold">{{ list.name || '-' }}</small>
               </td>
               <td>
-                <small class="font-bold">{{ (list.price )|| '-' }}</small>
-              </td>
-              <td>
-                <small class="font-bold">{{ (list.size )|| '-' }}</small>
-              </td>
-              <td>
-                <small class="font-bold">{{ (list.color )|| '-' }}</small>
+                <small class="font-bold">{{ (list.discount + "%" ) || '-' }}</small>
               </td>
               <td>
                 <small class="font-bold">{{ (list.description )|| '-' }}</small>
+              </td>
+              <td>
+                <small class="font-bold">{{ (list.valid_from )|| '-' }}</small>
+              </td>
+              <td>
+                <small class="font-bold">{{ (list.valid_to)|| '-' }}</small>
               </td>
               <td>
                 <span class="p-0 m-0" @click="statusChange('is_active', !list.is_active, list.id)">
@@ -201,7 +201,7 @@
 
         <div class="input-group mb-3 col-md-6">
           <label for="category" class="text-capitalize ml-3">
-            category 
+            category
             <small
               :class="!detail.category || errors.has('category') ? 'text-danger' : 'text-success' "
             >*</small>
@@ -229,72 +229,94 @@
         </div>
 
         <div class="input-group mb-3 col-md-6">
-          <label for="price" class="text-capitalize ml-3">
-            price
+          <label for="code" class="text-capitalize ml-3">
+            code
             <small
-              :class="!detail.price || errors.has('price') ? 'text-danger' : 'text-success' "
+              :class="!detail.code || errors.has('code') ? 'text-danger' : 'text-success' "
             >*</small>
           </label>
           <div class="input-group">
             <input
               type="text"
-              id="price"
-              name="price"
+              id="code"
+              name="code"
               required
               class="form-control"
-              placeholder="Enter price"
-              v-model="detail.price"
+              placeholder="Enter code "
+              v-model="detail.code"
+              v-validate="'required'"
+              :class="{ 'is-invalid': errors.has('code') }"
+            />
+          </div>
+          <small v-if="errors.has('code')" class="text-danger mt-1">{{ errors.first('code') }}</small>
+        </div>
+
+        <div class="input-group mb-3 col-md-6">
+          <label for="discount" class="text-capitalize ml-3">
+            discount
+            <small
+              :class="!detail.discount || errors.has('discount') ? 'text-danger' : 'text-success' "
+            >*</small>
+          </label>
+          <div class="input-group">
+            <input
+              type="text"
+              id="discount"
+              name="discount"
+              required
+              class="form-control"
+              placeholder="Enter discount"
+              v-model="detail.discount"
               v-validate="'required|numeric'"
-              :class="{ 'is-invalid': errors.has('price') }"
+              :class="{ 'is-invalid': errors.has('discount') }"
             />
           </div>
-          <small v-if="errors.has('price')" class="text-danger mt-1">{{ errors.first('price') }}</small>
+          <small
+            v-if="errors.has('discount')"
+            class="text-danger mt-1"
+          >{{ errors.first('discount') }}</small>
         </div>
 
+        <!-- Date Picker -->
         <div class="input-group mb-3 col-md-6">
-          <label for="size" class="text-capitalize ml-3">
-            size
+          <label for="valid_from" class="text-capitalize ml-3">
+            Valid From
             <small
-              :class="!detail.size || errors.has('size') ? 'text-danger' : 'text-success' "
+              :class="!detail.valid_from || errors.has('valid_from') ? 'text-danger' : 'text-success' "
             >*</small>
           </label>
           <div class="input-group">
-            <input
-              type="text"
-              id="size"
-              name="size"
-              required
-              class="form-control"
-              placeholder="Enter size "
-              v-model="detail.size"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('size') }"
-            />
+            <date-picker
+              v-model="detail.valid_from"
+              :config="optionsFrom"
+              placeholder="Select Valid From Date"
+            ></date-picker>
           </div>
-          <small v-if="errors.has('size')" class="text-danger mt-1">{{ errors.first('size') }}</small>
+          <small
+            v-if="errors.has('valid_from')"
+            class="text-danger mt-1"
+          >{{ errors.first('valid_from') }}</small>
         </div>
 
+        <!-- Date Picker -->
         <div class="input-group mb-3 col-md-6">
-          <label for="color" class="text-capitalize ml-3">
-            size number
+          <label for="valid_to" class="text-capitalize ml-3">
+            Valid To
             <small
-              :class="!detail.color || errors.has('color') ? 'text-danger' : 'text-success' "
+              :class="!detail.valid_to || errors.has('valid_to') ? 'text-danger' : 'text-success' "
             >*</small>
           </label>
           <div class="input-group">
-            <input
-              type="text"
-              id="color"
-              name="color"
-              required
-              class="form-control"
-              placeholder="Enter size number (Ex. 14.5-15)"
-              v-model="detail.color"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('color') }"
-            />
+            <date-picker
+              v-model="detail.valid_to"
+              :config="optionsTo"
+              placeholder="Select Valid To Date"
+            ></date-picker>
           </div>
-          <small v-if="errors.has('color')" class="text-danger mt-1">{{ errors.first('color') }}</small>
+          <small
+            v-if="errors.has('valid_to')"
+            class="text-danger mt-1"
+          >{{ errors.first('valid_to') }}</small>
         </div>
 
         <div class="input-group mb-3 col-md-12">
@@ -381,14 +403,32 @@ import PageHeader from "../../../../components/custom/PageHeader";
 import { async } from "q";
 import apiServices from "../../../../Services/apiServices";
 
+// import Datepicker from "vuejs-datepicker/dist/vuejs-datepicker.esm.js";
+import datePicker from "vue-bootstrap-datetimepicker";
+
 export default {
-  name: "Products",
+  name: "Offers",
   components: {
     Switches,
-    PageHeader
+    PageHeader,
+    // Datepicker
+    datePicker
   },
   data: function() {
     return {
+      optionsFrom: {
+        format: "YYYY-MM-DD h:mm:ss",
+        useCurrent: false,
+        showClear: true,
+        showClose: true
+      },
+      optionsTo: {
+        format: "YYYY-MM-DD h:mm:ss",
+        useCurrent: false,
+        showClear: true,
+        showClose: true
+      },
+      //   format: "yyyy-mm-dd ",
       baseURL: baseURL,
       allSelectedData: false,
       selectedIds: [],
@@ -397,11 +437,12 @@ export default {
       detail: {
         name: "",
         category_id: "",
-        price: "",
-        size: "",
-        color: "",
+        discount: "",
+        code: "",
         description: "",
         image: "",
+        valid_from: new Date(),
+        valid_to: "",
         is_active: true
       },
       search: PageHeader.data.search,
@@ -424,6 +465,9 @@ export default {
   computed: {},
   // computed
   methods: {
+    logChangedMonth(date) {
+      this.changedMonthLog.push(date);
+    },
     async deleteAllFn() {
       var request = {
         ids: this.selectedIds
@@ -446,7 +490,7 @@ export default {
           if (result.value) {
             if (this.selectedIds && this.selectedIds.length) {
               let res = await Services.call(
-                ApiCollections.products_delete_multiple
+                ApiCollections.offers_delete_multiple
               ).deleteMany(request);
 
               /**
@@ -548,7 +592,7 @@ export default {
 
     /** get details by id */
     async getDetails(id) {
-      let res = await Services.call(ApiCollections.products_get).getOne(id);
+      let res = await Services.call(ApiCollections.offers_get).getOne(id);
       this.detail = res.data;
       if (res && res.success && res.success == true) {
         this.detail = res.data;
@@ -593,7 +637,7 @@ export default {
         Services.notify("e", "Record details not found");
         return false;
       }
-      let res = await Services.call(ApiCollections.products_delete).delete(
+      let res = await Services.call(ApiCollections.offers_delete).delete(
         list.id
       );
       if (res && res.success && res.success == true) {
@@ -638,9 +682,10 @@ export default {
       let formData = new FormData();
       formData.append("name", this.detail.name);
       formData.append("category_id", this.detail.category_id);
-      formData.append("price", this.detail.price);
-      formData.append("size", this.detail.size);
-      formData.append("color", this.detail.color);
+      formData.append("discount", this.detail.discount);
+      formData.append("code", this.detail.code);
+      formData.append("valid_from", this.detail.valid_from);
+      formData.append("valid_to", this.detail.valid_to);
       formData.append("description", this.detail.description);
       formData.append("is_active", this.detail.is_active);
       // if (this.detail.image) {
@@ -655,7 +700,7 @@ export default {
 
       this.$Progress.start();
       if (this.detail && this.detail.id) {
-        var apiObject = this.$_.clone(ApiCollections.products_update);
+        var apiObject = this.$_.clone(ApiCollections.offers_update);
         apiObject.url += this.detail.id;
 
         let res = await Services.call(apiObject).post(formData);
@@ -686,7 +731,7 @@ export default {
         }
       } else {
         /** create data */
-        let res = await Services.call(ApiCollections.products_create).post(
+        let res = await Services.call(ApiCollections.offers_create).post(
           formData
         );
         /** set data  */
@@ -718,8 +763,8 @@ export default {
       var request = {
         page: this.page,
         limit: this.limit,
-        relation: ["category"],
-        category_list: ["id", "name"]
+        relation: ["category_detail"],
+        category_detail_list: ["id", "name"]
       };
 
       /** if search found then send to request */
@@ -734,7 +779,7 @@ export default {
 
       let res = await Services.call(
         // ApiCollections.training_activities_listing
-        ApiCollections.products_list
+        ApiCollections.offers_list
       ).post(request);
 
       /** check error or success response */
@@ -767,7 +812,7 @@ export default {
       }
 
       let res = await Services.call(
-        ApiCollections.products_update_status_change
+        ApiCollections.offers_update_status_change
       ).post(request);
 
       /** set update data  */
@@ -806,13 +851,13 @@ export default {
     }
   },
   watch: {
-    // "detail.name"(newVal) {
-    //     if (newVal) {
-    //         this.detail.code = this.$_.clone(
-    //             newVal.replace(/ /g, "_").toUpperCase()
-    //         );
-    //     }
-    // },
+    "detail.code"(newVal) {
+      if (newVal) {
+        this.detail.code = this.$_.clone(
+          newVal.replace(/ /g, "_").toUpperCase()
+        );
+      }
+    },
     page: function(val) {
       this.pageChangeFn(parseInt(val));
     }
