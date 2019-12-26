@@ -45,6 +45,7 @@
     "vue-sweetalert2": "^2.1.1",
     "vue-switches": "^2.0.1",
     "vue-underscore": "^0.1.4",
+    "vue-upload-multiple-image": "^1.1.4",
     "vuedraggable": "^2.23.2",
     "vuejs-datepicker": "^1.6.2",
     "vuex": "^3.1.1"

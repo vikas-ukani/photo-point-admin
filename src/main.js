@@ -9,6 +9,7 @@ import Vue from 'vue'
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
+require('./package-injection')
 require('dotenv').config()
 //// To Remove CORS ERROR
 Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
@@ -60,7 +61,6 @@ Vue.use(VeeValidate);
 // cssVars()
 
 Vue.use(BootstrapVue)
-
 
 import "./Services/filters-directives";
 require("./Services/filters-directives");

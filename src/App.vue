@@ -29,5 +29,5 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
 // Import Main styles for this application
 @import "./assets/scss/style";
 
-@import "~pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
+@import "~/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 </style>

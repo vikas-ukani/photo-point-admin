@@ -74,17 +74,16 @@ export default new Router({
         //   component: Dashboard,
         //   beforeEnter: ifAuthenticated,
         // },
-        {
-          path: "dashboard",
-          name: "Dashboard",
-          component: Dashboard1
-        },
+        // {
+        //   path: "dashboard",
+        //   name: "Dashboard",
+        //   component: Dashboard1
+        // },
         {
           path: "users",
           name: "Users",
           component: Users
         },
-
         {
           path: "/countries", // route_prefix +
           name: "Countries",

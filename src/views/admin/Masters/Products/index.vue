@@ -45,12 +45,13 @@
               </td>
 
               <td>
-                <!-- {{ baseURL + list.image }} -->
                 <img
-                  v-bind:src=" list.image"
+                  v-if="list.image && list.image.length && list.image[0]"
+                  multiple
+                  v-bind:src=" list.image[0]"
                   v-bind:alt="list.name"
-                  height="50"
-                  width="50"
+                  height="150"
+                  width="150"
                   class="img-fluid"
                 />
               </td>
@@ -105,31 +106,31 @@
         </table>
         <div class="col-md-12">
           <span class="col-xl-4 col-sm-4 col-md-4 col-xs-4 pull-left">
-            <div class="form-group">
-              <div class="input-group">
-                <span class="input-group-addon">
+            <div class="input-group mb-3">
+              <div class="input-group-prepend">
+                <span class="input-group-text" id="basic-addon1">
                   <b>Limit:</b>
                 </span>
-                <select
-                  class="form-control col-md-4 col-lg-4 col-sm-4"
-                  @change="changePageLimits($event)"
-                  v-model="limit"
-                >
-                  <option
-                    v-for="(limit, index) in pageLimits"
-                    :key="index"
-                    :value="limit.value"
-                    v-show="(totalCount >=  limit.value)"
-                  >
-                    {{limit.key}}
-                    <!-- -- {{totalCount }} - {{ limit.value}} -->
-                  </option>
-                  <option :value="totalCount">
-                    All
-                    <!-- {{ totalCount }} -- {{ limit.value}} -->
-                  </option>
-                </select>
               </div>
+              <select
+                class="form-control col-md-4 col-lg-4 col-sm-4"
+                @change="changePageLimits($event)"
+                v-model="limit"
+              >
+                <option
+                  v-for="(limit, index) in pageLimits"
+                  :key="index"
+                  :value="limit.value"
+                  v-show="(totalCount >=  limit.value)"
+                >
+                  {{limit.key}}
+                  <!-- -- {{totalCount }} - {{ limit.value}} -->
+                </option>
+                <option :value="totalCount">
+                  All
+                  <!-- {{ totalCount }} -- {{ limit.value}} -->
+                </option>
+              </select>
             </div>
           </span>
           <span class="col-xl-4 col-sm-4 col-md-4 col-xs-4">
@@ -201,7 +202,7 @@
 
         <div class="input-group mb-3 col-md-6">
           <label for="category" class="text-capitalize ml-3">
-            category 
+            category
             <small
               :class="!detail.category || errors.has('category') ? 'text-danger' : 'text-success' "
             >*</small>
@@ -326,24 +327,17 @@
 
         <div class="input-group">
           <div class="input-group col-md-12">
-            <img
-              v-if="detail.image && detail.id"
-              v-bind:src="detail.image"
-              class="img-thumbnail"
-              width="120"
-              height="150"
-            />
             <div class="input-group pull-left">
-              <label class="btn btn-primary btn-sm" for="file-upload">
-                <input
-                  id="file-upload"
-                  type="file"
-                  class="d-none"
-                  v-on:change="handleFileUpload"
-                  accept="image/png, image/jpeg, image/gif"
-                />
-                Upload Product Image
-              </label>
+              <vue-upload-multiple-image
+                @upload-success="uploadImageSuccess"
+                @before-remove="beforeRemove"
+                @edit-image="editImage"
+                browseText="Select Product Images"
+                dragText="Browse Image"
+                primaryText="Image"
+                popupText="Uploaded Image"
+                :data-images="detail.images"
+              ></vue-upload-multiple-image>
             </div>
           </div>
         </div>
@@ -381,10 +375,13 @@ import PageHeader from "../../../../components/custom/PageHeader";
 import { async } from "q";
 import apiServices from "../../../../Services/apiServices";
 
+import VueUploadMultipleImage from "vue-upload-multiple-image";
+
 export default {
   name: "Products",
   components: {
     Switches,
+    VueUploadMultipleImage,
     PageHeader
   },
   data: function() {
@@ -401,8 +398,8 @@ export default {
         size: "",
         color: "",
         description: "",
-        image: "",
-        is_active: true
+        is_active: true,
+        images: []
       },
       search: PageHeader.data.search,
       showModal: false,
@@ -413,7 +410,6 @@ export default {
     };
   },
   mounted() {
-    // this.getAllList();
     this.getCategoryList(); // categories_list
   },
   beforeMount() {
@@ -424,6 +420,35 @@ export default {
   computed: {},
   // computed
   methods: {
+    toDataURL(url, callback) {
+      var xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        var reader = new FileReader();
+        reader.onloadend = function() {
+          callback(reader.result);
+        };
+        reader.readAsDataURL(xhr.response);
+      };
+      xhr.open("GET", url);
+      xhr.responseType = "blob";
+      xhr.send();
+    },
+
+    uploadImageSuccess(formData, index, fileList) {
+      console.log("Check Data", formData, index, fileList);
+      this.detail.images = fileList;
+    },
+    beforeRemove(index, done, fileList) {
+      this.detail.images = fileList;
+      var r = confirm("remove image");
+      if (r == true) {
+        done();
+      } else {
+      }
+    },
+    editImage(formData, index, fileList) {
+      console.log("edit data", formData, index, fileList);
+    },
     async deleteAllFn() {
       var request = {
         ids: this.selectedIds
@@ -549,9 +574,41 @@ export default {
     /** get details by id */
     async getDetails(id) {
       let res = await Services.call(ApiCollections.products_get).getOne(id);
-      this.detail = res.data;
+
       if (res && res.success && res.success == true) {
         this.detail = res.data;
+        let imageUrls = res.data.image;
+
+        if (imageUrls && imageUrls.length > 0) {
+          this.detail.images = [];
+          imageUrls.forEach((imageUrl, index) => {
+            this.detail.images[index] = {
+              name: `image${index}.png`,
+              // name: "vrushik1.png",
+              path: imageUrl,
+              highlight: 1,
+              default: 1
+            };
+
+            // this.toDataURL(imageUrl, dataUrl => {
+            //   let imageDataIs = {
+            //     name: `image${index}.png`,
+            //     path: dataUrl,
+            //     highlight: 1,
+            //     default: 1
+            //   };
+            //   this.detail.images.push(imageDataIs);
+            // });
+          });
+          console.log("Data are", this.detail.images);
+        }
+
+        //         this.detail.images.map(imageUrl => () {
+        //           toDataURL('https://www.gravatar.com/avatar/d50c83cc0c6523b4d3f6085295c953e0', function(dataUrl) {
+        //   console.log('RESULT:', dataUrl)
+        // }),
+        //         });
+
         this.$Progress.finish();
         // Services.notify("s", res.message);
         this.showModal = true;
@@ -619,9 +676,15 @@ export default {
     clearAllData() {
       this.detail = {
         name: "",
-        code: "",
-        is_active: true
+        category_id: "",
+        price: "",
+        size: "",
+        color: "",
+        description: "",
+        is_active: true,
+        images: []
       };
+      // this.detail.images = [];
     },
     handleFileUpload(e) {
       let input = event.target;
@@ -633,9 +696,37 @@ export default {
         };
         reader.readAsDataURL(input.files[0]);
       }
+
+      // console.log(this.detail.image);
     },
     async submitData() {
       let formData = new FormData();
+
+      if (this.detail.images && this.detail.images.length) {
+        /** start  */
+
+        for (var i = 0; i < this.detail.images.length; i++) {
+          let file = this.detail.images[i];
+          var index = file.path.search("data:image");
+          if (index >= 0) {
+            var arr = file.path.split(",");
+            console.log("Arr 1", i, arr);
+
+            var mime = arr[0].match(/:(.*?);/)[1];
+            var bstr = atob(arr[1]);
+            var n = bstr.length;
+            var u8arr = new Uint8Array(n);
+            while (n--) {
+              u8arr[n] = bstr.charCodeAt(n);
+            }
+            formData.append(
+              "images[]",
+              new File([u8arr], file.name, { type: mime })
+            );
+          }
+        }
+      }
+
       formData.append("name", this.detail.name);
       formData.append("category_id", this.detail.category_id);
       formData.append("price", this.detail.price);
@@ -646,9 +737,9 @@ export default {
       // if (this.detail.image) {
       //   formData.append("image", this.detail.image);
       // }
-      if (this.selectedFile) {
+      /*       if (this.selectedFile) {
         formData.append("image", this.selectedFile);
-      }
+      } */
       // if (this.detail.id) {
       //   formData.append("id", this.detail.id);
       // }
