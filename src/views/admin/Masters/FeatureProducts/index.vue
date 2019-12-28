@@ -48,7 +48,7 @@
                 <img
                   v-if="list.image && list.image.length && list.image[0]"
                   multiple
-                  v-bind:src="list.image[0]"
+                  v-bind:src=" list.image[0]"
                   v-bind:alt="list.name"
                   height="150"
                   width="150"
@@ -81,16 +81,17 @@
                     theme="bulma"
                     color="green"
                     type-bold="false"
-                  ></switches>
+                  />
                 </span>
               </td>
+
               <td>
                 <a
                   v-b-tooltip.hover.left="'Edit ' + list.name"
                   class="text-primary p-0"
                   @click="getDetails(list.id)"
                 >
-                  <i class="fa fa-edit"></i>
+                  <i class="fa fa-edit"/>
                 </a>
 
                 <a
@@ -151,7 +152,7 @@
               :total-rows="totalCount"
               :per-page="limit"
               aria-controls="my-table"
-            ></b-pagination>
+            />
           </div>
         </div>
       </div>
@@ -825,17 +826,17 @@ export default {
 
       let res = await Services.call(
         // ApiCollections.training_activities_listing
-        ApiCollections.products_list
+        ApiCollections.feature_product_list
       ).post(request);
 
       /** check error or success response */
-      if (res && res.success && res.success == true) {
+      if (res && res.success && res.success === true) {
         this.lists = res.data.list;
 
         this.totalCount = parseInt(res.data.count);
 
         if (this.lists && this.lists.length) {
-          /** to set defalt check box is false */
+          /** to set default check box is false */
           this.$_.each(this.lists, function(value, key) {
             value.is_selected = false;
           });
@@ -850,24 +851,25 @@ export default {
       }
     },
     async statusChange(key, value, id) {
-      var request = {
+      let request = {
         id: id
       };
-      if (key == "is_active") {
+      if (key === "is_active") {
         request.is_active = value;
       }
+
 
       let res = await Services.call(
         ApiCollections.products_update_status_change
       ).post(request);
 
       /** set update data  */
-      if (res && res.success && res.success == true) {
-        var index = this.$_.findIndex(this.lists, { id: id });
+      if (res && res.success && res.success === true) {
+        let index = this.$_.findIndex(this.lists, {id: id});
 
         /** stop loader */
         this.$Progress.finish();
-        if (index == -1) {
+        if (index === -1) {
           Services.notify("e", "Record not found in listing");
           return false;
         }

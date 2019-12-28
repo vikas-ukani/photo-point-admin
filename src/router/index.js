@@ -15,6 +15,9 @@ import Full from "../containers/Full";
 import Users from "../views/Users/Index";
 import EditUsers from "../views/Users/Edit";
 
+import Shopper from "../views/Shopper/";
+// import EditUsers from "../views/Users/Edit";
+
 // Views
 import Profile from "../views/admin/auth/Profile";
 
@@ -22,6 +25,7 @@ import Profile from "../views/admin/auth/Profile";
 import Countries from "../views/admin/Masters/Countries";
 import ComplaintCategories from "../views/admin/Masters/ComplaintCategories";
 import Products from "../views/admin/Masters/Products";
+import FeatureProducts from "../views/admin/Masters/FeatureProducts";
 import Offers from "../views/admin/Masters/Offers";
 // import TrainingActivities from "../views/admin/Masters/TrainingActivities";
 
@@ -85,6 +89,12 @@ export default new Router({
           component: Users
         },
         {
+          path: "shopper",
+          name: "Shopper",
+          component: Shopper,
+          beforeEnter: ifAuthenticated
+        },
+        {
           path: "/countries", // route_prefix +
           name: "Countries",
           component: Countries,
@@ -102,6 +112,12 @@ export default new Router({
           path: "/products", // route_prefix +
           name: "Products",
           component: Products,
+          beforeEnter: ifAuthenticated
+        },
+        {
+          path: "/feature-products", // route_prefix +
+          name: "FeatureProducts",
+          component: FeatureProducts,
           beforeEnter: ifAuthenticated
         },
         {

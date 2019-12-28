@@ -6,6 +6,9 @@ import 'core-js/es7/array'
 // import cssVars from 'css-vars-ponyfill'
 import Vue from 'vue'
 
+// require("./Services/filters-directives")
+// import "./Services/filters-directives";
+
 import VueResource from 'vue-resource'
 Vue.use(VueResource)
 
@@ -41,9 +44,7 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-
 Vue.config.productionTip = false
-
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';

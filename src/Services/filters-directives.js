@@ -1,31 +1,41 @@
-import Vue from "vue";
+import Vue from 'vue';
 
-Vue.filter("toFixed", function(price, limit) {
+
+import moment from 'moment'
+
+Vue.filter('dateFormat', function (value) {
+  console.log("Date Format", value);
+  if (value) {
+    return moment(String(value)).format('MM/DD/YYYY hh:mm')
+  }
+});
+
+Vue.filter("toFixed", function (price, limit) {
   return price.toFixed(limit);
 });
 
-Vue.filter("toUSD", function(price) {
+Vue.filter("toUSD", function (price) {
   return `$${price}`;
 });
-Vue.filter("capitalize", function(input) {
+Vue.filter("capitalize", function (input) {
   return input && input.length > 0
     ? input.charAt(0).toUpperCase() + input.substr(1).toLowerCase()
     : input;
 });
 
-Vue.filter("lowercase", function(input) {
+Vue.filter("lowercase", function (input) {
   return input && input.length > 0 ? input.toLowerCase() : input;
 });
 
-Vue.filter("upercase", function(input) {
+Vue.filter("upercase", function (input) {
   return input && input.length > 0 ? input.toUpperCase() : input;
 });
 
-Vue.directive("img", function(url) {
+Vue.directive("img", function (url) {
   var img = new Image();
   img.src = url;
 
-  img.onload = function() {
+  img.onload = function () {
     this.el.src = url;
     $(this.el)
       .css("opacity", 0)

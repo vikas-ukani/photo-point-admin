@@ -19,6 +19,12 @@ export default {
       }
     },
     {
+      name: "Shoppers",
+      url: "/shopper",
+      icon: "icon-user",
+      sequence: 5
+    },
+    {
       name: "Countries",
       url: "/countries",
       icon: "icon-location-pin",
@@ -29,6 +35,12 @@ export default {
       url: "/products",
       icon: "icon-directions",
       sequence: 14
+    },
+    {
+      name: "Feature Products",
+      url: "/feature-products",
+      icon: "icon-directions",
+      sequence: 15
     },
     {
       name: "Orders",
