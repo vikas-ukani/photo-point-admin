@@ -1,13 +1,13 @@
 # Photo Maker - Admin Panel - Complete Admin Panel Customization Panel Created In VueJS Using Lumen APIs
- 
+
 ## Installation
 
 ### Clone repo
 
-``` bash
+```bash
 # clone the repo from GIT
 $ git clone https://github.com/vikas-ukani/photo-point-admin.git
-
+    
 # go into admin's directory
 $ cd photo-point-admin
 
@@ -17,7 +17,7 @@ $ npm install
 
 ## Usage
 
-``` bash
+```bash
 # Start with hot reload at localhost:8080
 npm run start
 
@@ -35,7 +35,6 @@ npm run test:e2e
 
 ```
 
-
 ## What's included
 
 Within the download you'll find the following directories and files:
@@ -49,7 +48,7 @@ CoreUI-Vue/
 │   │   └── scss/               # user styles
 │   ├── components/             # ui components
 │   ├── containers/             # ui containers
-│   ├── router/                 # routing 
+│   ├── router/                 # routing
 │   ├── shared/                 # utils
 │   ├── views/                  # ui views
 │   ├── _nav.js                 # sidebar nav config

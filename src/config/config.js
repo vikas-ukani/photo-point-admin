@@ -88,8 +88,22 @@ export const ApiCollections = {
   /** categories api */
   categories_list: { method: "POST", url: api_prefix + "categories-list" },
 
-  /** products apis */
+  /**
+   * Feature Products List
+   */
   feature_product_list: { method: "POST", url: api_prefix + "feature-product-list" },
+  feature_product_create: { method: "POST", url: api_prefix + "feature-product-create" },
+  feature_product_get: { method: "GET", url: api_prefix + "feature-product-show/" },
+  feature_product_update: { method: "POST", url: api_prefix + "feature-product-update/" },
+  feature_product_delete_multiple: {  method: "delete", url: api_prefix + "feature-product-delete-multiple"  },
+  feature_product_delete: {  method: "get",  url: api_prefix + "feature-product-delete/"  },
+  feature_product_update_status_change: { method: "POST", url: api_prefix + "feature-product-status-change" },
+  
+  
+  
+  
+  
+  /** products apis */
   products_list: { method: "POST", url: api_prefix + "products-list" },
   products_create: { method: "POST", url: api_prefix + "products-create" },
   products_get: { method: "GET", url: api_prefix + "products-show/" },
