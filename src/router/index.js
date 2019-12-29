@@ -116,7 +116,7 @@ export default new Router({
         },
         {
           path: "/feature-products", // route_prefix +
-          name: "FeatureProducts",
+          name: "Feature Products",
           component: FeatureProducts,
           beforeEnter: ifAuthenticated
         },

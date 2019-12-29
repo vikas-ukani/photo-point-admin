@@ -45,12 +45,13 @@
               </td>
 
               <td>
-                <!-- {{ baseURL + list.image }} -->
+
                 <img
-                  v-bind:src=" list.image"
+                   multiple
+                  v-bind:src="list.image"
                   v-bind:alt="list.name"
-                  height="50"
-                  width="50"
+                  height="150"
+                  width="150"
                   class="img-fluid"
                 />
               </td>
@@ -863,7 +864,7 @@ export default {
     }
   }
 };
-</script> 
+</script>
 
 <style scope="">
 .modal-mask {

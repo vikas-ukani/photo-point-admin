@@ -42,22 +42,22 @@ export default {
       icon: "icon-directions",
       sequence: 15
     },
-    {
-      name: "Orders",
-      url: "/orders",
-      icon: "icon-order",
-      sequence: 14
-    },
-    {
-      name: "Customers",
-      url: "/customer",
-      icon: "icon-user",
-      badge: {
-        variant: "info",
-        text: "NEW"
-      },
-      sequence: 14
-    },
+    // {
+    //   name: "Orders",
+    //   url: "/orders",
+    //   icon: "icon-order",
+    //   sequence: 14
+    // },
+    // {
+    //   name: "Customers",
+    //   url: "/customer",
+    //   icon: "icon-user",
+    //   badge: {
+    //     variant: "info",
+    //     text: "NEW"
+    //   },
+    //   sequence: 14
+    // },
     {
       name: "Offers",
       url: "/offers",

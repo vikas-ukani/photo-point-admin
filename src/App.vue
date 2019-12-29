@@ -2,16 +2,24 @@
   <div>
     <!-- <notifications group="foo" /> -->
     <notifications group="foo" position="top center" />
-    <router-view></router-view>
-    <vue-progress-bar></vue-progress-bar>
+    <router-view/>
+    <vue-progress-bar/>
   </div>
 </template>
+
+
+<!--<link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">-->
+
+
 
 <script>
 export default {
   name: "App"
 };
 </script>
+
+
+<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
 
 <style lang="scss">
 // CoreUI Icons Set
@@ -26,6 +34,8 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
 @import "~flag-icon-css/css/flag-icon.min.css";
 /* Import Bootstrap Vue Styles */
 @import "~bootstrap-vue/dist/bootstrap-vue.css";
+/*@import "~vue-multiselect.min.css";*/
+
 // Import Main styles for this application
 @import "./assets/scss/style";
 
