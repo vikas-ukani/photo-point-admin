@@ -49,6 +49,10 @@ export const ApiCollections = {
   shopper_listing: { method: "GET", url: api_prefix + "shopper-list" },
   shopper_status_change: { method: "delete", url: api_prefix + "shopper-status-change" },
 
+
+
+  category_list: { method: "POST", url: api_prefix + "category-list" },
+
   users_listing: { method: "GET", url: api_prefix + "users-list" },
   getUserById: { method: "GET", url: api_prefix + "user/" },
   update_user: { method: "post", url: api_prefix + "user-update", headers: { headers: { "content-type": "multipart/form-data" } } },
@@ -98,11 +102,11 @@ export const ApiCollections = {
   feature_product_delete_multiple: {  method: "delete", url: api_prefix + "feature-product-delete-multiple"  },
   feature_product_delete: {  method: "get",  url: api_prefix + "feature-product-delete/"  },
   feature_product_update_status_change: { method: "POST", url: api_prefix + "feature-product-status-change" },
-  
-  
-  
-  
-  
+
+
+
+
+
   /** products apis */
   products_list: { method: "POST", url: api_prefix + "products-list" },
   products_create: { method: "POST", url: api_prefix + "products-create" },

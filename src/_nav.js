@@ -25,6 +25,12 @@ export default {
       sequence: 5
     },
     {
+      name: "Category",
+      url: "/category",
+      icon: "icon-category",
+      sequence: 5
+    },
+    {
       name: "Countries",
       url: "/countries",
       icon: "icon-location-pin",

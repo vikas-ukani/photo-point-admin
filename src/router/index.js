@@ -27,6 +27,7 @@ import ComplaintCategories from "../views/admin/Masters/ComplaintCategories";
 import Products from "../views/admin/Masters/Products";
 import FeatureProducts from "../views/admin/Masters/FeatureProducts";
 import Offers from "../views/admin/Masters/Offers";
+import Category from "../views/admin/Masters/Category";
 // import TrainingActivities from "../views/admin/Masters/TrainingActivities";
 
 // Containers
@@ -92,6 +93,13 @@ export default new Router({
           path: "shopper",
           name: "Shopper",
           component: Shopper,
+          beforeEnter: ifAuthenticated
+        },
+
+        {
+          path: "category",
+          name: "Category",
+          component: Category,
           beforeEnter: ifAuthenticated
         },
         {

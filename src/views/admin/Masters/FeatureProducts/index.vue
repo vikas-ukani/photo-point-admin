@@ -201,26 +201,47 @@
             >*</small>
           </label>
           <div class="input-group">
-<!--            <pre>-->
-<!--              {{detail}}-->
-<!--            </pre>-->
+<!--                        <pre>-->
+<!--                          {{detail}}-->
+<!--                        </pre>-->
 
-             <multiselect v-model="detail.product_detail"
+            <multiselect v-model="detail.product_detail"
                          @search-change="onSearchProductList"
                          placeholder="Select any product to add an feature product"
                          label="name" track-by="id"
-
                          :options="products_list" :custom-label="customLabel" :show-labels="false">
-              <template slot="product_id" slot-scope="props">
+
+
+              <template slot="option" slot-scope="props">
                 <div class="option__desc">
-                  <img class="option__image" :src="props.option.image[0]" height="50" width="50"
-                       :alt="props.option.name">
-                  <span class="option__title">
-                  {{ props.option.name }}
-                </span>
-                  <!-- <span class="option__small">{{ props.option.name }}</span>-->
+
+                  <img class="option__image" :src="props.option.image" alt="No Man’s Sky" height="50" width="50">
+                  <span class="option__title"> {{ props.option.name }}</span>
                 </div>
               </template>
+              <template slot="singleLabel" slot-scope="props">
+                <img class="option__image" :src="props.option.image" alt="No Man’s Sky" height="50" width="50">
+                <span class="option__desc"><span class="option__title"> {{ props.option.name }}</span>
+                              </span>
+              </template>
+            </multiselect>
+
+            <!--              <template slot="singleLabel" slot-scope="props"><img class="option__image" :src="props.option.image"-->
+            <!--                                                                   alt="No Man’s Sky"><span class="option__desc"><span-->
+            <!--                class="option__title">{{ props.option.title }}</span></span></template>-->
+
+            <!--              <template slot="product_id" slot-scope="props">-->
+            <!--                {{props}}-->
+            <!--                <div class="option__desc">-->
+
+            <!--                  <img class="option__image" :src="props.option.product_detail.image[0]" height="50" width="50"-->
+            <!--                       :alt="props.option.image">-->
+            <!--                  <span class="option__title">-->
+            <!--&lt;!&ndash;                  {{ props.option }}&ndash;&gt;-->
+            <!--                </span>-->
+            <!--                  &lt;!&ndash; <span class="option__small">{{ props.option.name }}</span>&ndash;&gt;-->
+            <!--                </div>-->
+            <!--              </template>-->
             </multiselect>
 
           </div>
@@ -282,9 +303,8 @@
     // computed
     methods: {
       customLabel({name, desc}) {
-        return `${name} `
-        //  – ${desc}
-      },
+        return `${name}`
+       },
       toDataURL(url, callback) {
         let xhr = new XMLHttpRequest();
         xhr.onload = function () {
@@ -359,12 +379,12 @@
       },
 
       onSearchProductList(value) {
-         this.detail.searchTitle = value;
-         if (this.detail && this.detail.searchTitle && this.detail.searchTitle.length > 3){
-           this.getCategoryList()
-         }
+        this.detail.searchTitle = value;
+        if (this.detail && this.detail.searchTitle && this.detail.searchTitle.length > 3) {
+          this.getCategoryList()
+        }
 
-         // if (value.indexOf('Reset me!') !== -1) this.value = []
+        // if (value.indexOf('Reset me!') !== -1) this.value = []
       },
 
       async getCategoryList() {
