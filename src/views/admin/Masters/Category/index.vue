@@ -19,9 +19,15 @@
           <b-card-header><b>Main Categories</b></b-card-header>
 
           <b-tabs pills small card vertical nav-wrapper-class="w-25">
-            <b-tab v-for="(list, index) in lists" :key="index" :title="list.name" @click="getSubCategoriesList(list.id)">
+            <b-tab v-for="(list, index) in lists" :key="index" :title="list.name"
+                   @click="getSubCategoriesList(list.id)">
               <b-card-text>
-                <table class="table table-hover table-responsive-sm col-lg-12 col-md-12 col-sm-12 col-xs-12">
+
+                <!--                <pre>-->
+                <!--                  {{subCategoriesList}}-->
+                <!--                </pre>-->
+<!--                col-lg-12 col-md-12 col-sm-12 col-xs-12-->
+                <table class="table table-hover table-responsive-sm ">
                   <thead>
                   <tr>
                     <th nowrap>
@@ -64,6 +70,9 @@
                       <small class="font-bold">{{ list.name || '-' }}</small>
                     </td>
                     <td>
+                      <small class="font-bold">{{ list.code || '-' }}</small>
+                    </td>
+                    <td>
                       <small class="font-bold">{{ (list.description )|| '-' }}</small>
                     </td>
                     <td>
@@ -91,17 +100,22 @@
                         class="link text-danger p-0 ml-1"
                         @click="deleteConfirmation(list)"
                       >
-                        <i class="fa fa-trash"></i>
+                        <i class="fa fa-trash"/>
                       </a>
                     </td>
                   </tr>
                   </tbody>
                 </table>
 
+                <div
+                  class="no-data-found mt-5 col-md-12 display-5 text-center text-danger"
+                  v-if="!subCategoriesList || subCategoriesList.length === 0">
+                  <i class="fa fa-warning mr-3 mb-3"/>
+                  No Subcategories found,
+                </div>
 
               </b-card-text>
             </b-tab>
-
 
             <!--          <b-tab title="Tab 2"><b-card-text>Tab contents 2</b-card-text></b-tab>-->
             <!--          <b-tab title="Tab 3"><b-card-text>Tab contents 3</b-card-text></b-tab>-->
@@ -159,15 +173,14 @@
               :total-rows="totalCount"
               :per-page="limit"
               aria-controls="my-table"
-            ></b-pagination>
+            />
           </div>
         </div>
       </div>
       <div
         class="no-data-found mt-5 col-md-12 display-4 text-center text-danger"
-        v-if="!lists || lists.length == 0"
-      >
-        <i class="fa fa-warning mr-3"></i>No Data Found
+        v-if="!lists || lists.length === 0">
+        <i class="fa fa-warning mr-3"/> No Data Found
       </div>
     </div>
 
@@ -185,30 +198,66 @@
       @ok="submitData"
     >
       <form method="post" enctype="multipart/form-data" novalidate name="addEditForm" class="row">
-        <div class="input-group mb-3 col-md-6">
-          <label for="name" class="text-capitalize ml-3">
-            name
-            <small
-              :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
-            <input
-              type="text"
-              id="name"
-              name="name"
-              required
-              class="form-control"
-              placeholder="Enter name"
-              v-model="detail.name"
-              v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('name') }"
-            />
+
+          <pre>
+            {{this.detail}}
+          </pre>
+
+        <div class="input-group mb-3 col-md-12">
+          <div class="input-group-prepend col-md-12">
+            <span class="input-group-text" id="basic-addon1">
+              <!--              @change="selectedAllRecords(!allSelectedData)"-->
+            <b-form-checkbox
+              v-model="this.detail.is_parent"
+            > Parent
+            </b-form-checkbox>
+            </span>
+            <div class="input-group">
+<!--              @change="changePageLimits($event)"-->
+              <select
+                :disabled="this.detail.is_parent===false"
+                class="form-control "
+                v-model="this.detail.parent_id"
+                placeholder="Select main category."
+              >
+<!--                <option value="" selected>Select main category</option>-->
+                <option
+                  v-for="(list, index) in category_list" :key="index"
+                  :value="list.id"
+                >
+                  {{list.name}}
+                 </option>
+              </select>
           </div>
-          <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>
+
+
+
+          </div>
+
+          <!--          <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>-->
+
+
+          <!--          <label for="name" class="text-capitalize ml-3">-->
+          <!--            name-->
+          <!--            <small-->
+          <!--              :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "-->
+          <!--            >*</small>-->
+          <!--          </label>-->
+          <!--          <div class="input-group">-->
+          <!--            <input-->
+          <!--              type="text"-->
+          <!--              id="name"-->
+          <!--              name="name"-->
+          <!--              required-->
+          <!--              class="form-control"-->
+          <!--              placeholder="Enter name"-->
+          <!--              v-model="detail.name"-->
+          <!--              v-validate="'required'"-->
+          <!--              :class="{ 'is-invalid': errors.has('name') }"-->
+          <!--            />-->
+          <!--          </div>-->
+          <!--          <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>-->
         </div>
-
-
 
 
         <div class="input-group mb-3 col-md-12">
@@ -290,15 +339,14 @@
         subCategoriesList: [],
         pageLimits: [],
         detail: {
+          is_parent: false,
+          parent_id: "",
           name: "",
-          category_id: "",
-          price: "",
-          size: "",
-          color: "",
+          code: "",
+          image: "",
           description: "",
           is_active: true,
-          images: []
-        },
+         },
         search: PageHeader.data.search,
         showModal: false,
         totalCount: 0,
@@ -369,6 +417,7 @@
 
         if (res && res.success === true) {
           this.category_list = res.data.list;
+          this.getSubCategoriesList(_.first(this.category_list).id)
         } else {
           this.category_list = [];
         }
@@ -376,7 +425,7 @@
         console.log("Categ", this.category_list);
       },
 
-      async getSubCategoriesList(parent_id = null){
+      async getSubCategoriesList(parent_id = null) {
         this.subCategoriesList = [];
         let res = await Services.call(ApiCollections.category_list).post({
           parent_id: parent_id
