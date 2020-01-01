@@ -2,14 +2,14 @@
   <div class="animated fadeIn">
     <div class>
       <page-header
+        :is_delete_all="true"
+        :is_show_add_button="false"
+        :is_show_model="true"
+        :is_show_serach="true"
+        :search="search"
+        :selected_ids="selectedIds"
         :title="$route.name"
         :titleCounter="totalCount"
-        :is_show_serach="true"
-        :is_show_add_button="false"
-        :is_delete_all="true"
-        :selected_ids="selectedIds"
-        :is_show_model="true"
-        :search="search"
       />
       <div class="card card-body" v-if="lists && lists.length">
 
@@ -17,16 +17,16 @@
         >
 
           <b-card-header><b>Main Categories</b></b-card-header>
-
-          <b-tabs pills small card vertical nav-wrapper-class="w-25">
-            <b-tab v-for="(list, index) in lists" :key="index" :title="list.name"
-                   @click="getSubCategoriesList(list.id)">
+          <!--<pre>{{activeCategory}}</pre>-->
+          <b-tabs card nav-wrapper-class="w-25" pills small vertical>
+            <b-tab :key="index" :title="list.name" @click="getSubCategoriesList(list.id)"
+                   v-for="(list, index) in lists">
               <b-card-text>
 
                 <!--                <pre>-->
                 <!--                  {{subCategoriesList}}-->
                 <!--                </pre>-->
-<!--                col-lg-12 col-md-12 col-sm-12 col-xs-12-->
+                <!--                col-lg-12 col-md-12 col-sm-12 col-xs-12-->
                 <table class="table table-hover table-responsive-sm ">
                   <thead>
                   <tr>
@@ -46,7 +46,7 @@
                   </tr>
                   </thead>
                   <tbody v-if="subCategoriesList && subCategoriesList.length">
-                  <tr v-for="(list, index) in subCategoriesList" :key="index">
+                  <tr :key="index" v-for="(list, index) in subCategoriesList">
                     <td>
                       <b-form-checkbox
                         @change="selectCheckBox(list.id, !list.is_selected  )"
@@ -57,13 +57,13 @@
 
                     <td>
                       <img
-                        v-if="list.image && list.image.length && list.image[0]"
-                        multiple
-                        v-bind:src="list.image[0]"
-                        v-bind:alt="list.name"
-                        height="150"
-                        width="150"
                         class="img-fluid"
+                        height="150"
+                        multiple
+                        v-bind:alt="list.name"
+                        v-bind:src="list.image[0]"
+                        v-if="list.image && list.image.length && list.image[0]"
+                        width="150"
                       />
                     </td>
                     <td>
@@ -76,29 +76,29 @@
                       <small class="font-bold">{{ (list.description )|| '-' }}</small>
                     </td>
                     <td>
-                <span class="p-0 m-0" @click="statusChange('is_active', !list.is_active, list.id)">
+                <span @click="statusChange('is_active', !list.is_active, list.id)" class="p-0 m-0">
                   <switches
-                    v-model="list.is_active"
-                    v-bind:label="(!!list.is_active) ? 'Active' : 'Deactive'"
-                    theme="bulma"
                     color="green"
+                    theme="bulma"
                     type-bold="false"
+                    v-bind:label="(!!list.is_active) ? 'Active' : 'Deactive'"
+                    v-model="list.is_active"
                   />
                 </span>
                     </td>
                     <td>
                       <a
-                        v-b-tooltip.hover.left="'Edit ' + list.name"
-                        class="text-primary p-0"
                         @click="getDetails(list.id)"
+                        class="text-primary p-0"
+                        v-b-tooltip.hover.left="'Edit ' + list.name"
                       >
                         <i class="fa fa-edit"></i>
                       </a>
 
                       <a
-                        v-b-tooltip.hover.left="'Delete ' + list.name"
-                        class="link text-danger p-0 ml-1"
                         @click="deleteConfirmation(list)"
+                        class="link text-danger p-0 ml-1"
+                        v-b-tooltip.hover.left="'Delete ' + list.name"
                       >
                         <i class="fa fa-trash"/>
                       </a>
@@ -135,14 +135,14 @@
                 </span>
               </div>
               <select
-                class="form-control col-md-4 col-lg-4 col-sm-4"
                 @change="changePageLimits($event)"
+                class="form-control col-md-4 col-lg-4 col-sm-4"
                 v-model="limit"
               >
                 <option
-                  v-for="(limit, index) in pageLimits"
                   :key="index"
                   :value="limit.value"
+                  v-for="(limit, index) in pageLimits"
                   v-show="(totalCount >=  limit.value)"
                 >
                   {{limit.key}}
@@ -168,11 +168,11 @@
           </span>
           <div class="pull-right">
             <b-pagination
+              :per-page="limit"
+              :total-rows="totalCount"
+              aria-controls="my-table"
               class="col-xl-4 col-sm-4 col-md-4 col-xs-4"
               v-model="page"
-              :total-rows="totalCount"
-              :per-page="limit"
-              aria-controls="my-table"
             />
           </div>
         </div>
@@ -185,128 +185,164 @@
     </div>
 
     <b-modal
-      size="lg"
-      id="modal-lg"
-      :title="((  detail &&  detail.id  ) ? 'Edit ' : 'Add '  )  + $route.name   "
-      v-model="showModal"
-      okTitle="Save"
-      name="addEditForm"
-      :okDisabled="!!errors.any()"
-      :noCloseOnEsc="true"
       :noCloseOnBackdrop="true"
+      :noCloseOnEsc="true"
+      :okDisabled="!!errors.any()"
+      :title="((  detail &&  detail.id  ) ? 'Edit ' : 'Add '  )  + $route.name   "
       @close="clearAllData(); showModal = false"
       @ok="submitData"
+      id="modal-lg"
+      name="addEditForm"
+      okTitle="Save"
+      size="lg"
+      v-model="showModal"
     >
-      <form method="post" enctype="multipart/form-data" novalidate name="addEditForm" class="row">
+      <form class="row" enctype="multipart/form-data" method="post" name="addEditForm" novalidate>
 
-          <pre>
-            {{this.detail}}
-          </pre>
-
-        <div class="input-group mb-3 col-md-12">
-          <div class="input-group-prepend col-md-12">
+        <div class="input-group  col-md-12">
+          <div class="input-group-prepend  mb-3 col-md-12">
             <span class="input-group-text" id="basic-addon1">
               <!--              @change="selectedAllRecords(!allSelectedData)"-->
             <b-form-checkbox
-              v-model="this.detail.is_parent"
+              @change="stateChange('is_parent', !detail.is_parent)"
+              name="is_parent"
+              v-model="detail.is_parent"
             > Parent
             </b-form-checkbox>
             </span>
             <div class="input-group">
-<!--              @change="changePageLimits($event)"-->
               <select
-                :disabled="this.detail.is_parent===false"
+                :disabled="detail.is_parent===false"
                 class="form-control "
-                v-model="this.detail.parent_id"
                 placeholder="Select main category."
+                v-model="detail.parent_id"
               >
-<!--                <option value="" selected>Select main category</option>-->
                 <option
-                  v-for="(list, index) in category_list" :key="index"
-                  :value="list.id"
+                  :key="index" :value="list.id"
+                  v-for="(list, index) in category_list"
                 >
                   {{list.name}}
-                 </option>
+                </option>
               </select>
+            </div>
           </div>
 
 
-
+          <div class="input-group mb-3 col-md-12">
+            <label class="text-capitalize ml-3" for="name">
+              name
+              <small
+                :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+              >*</small>
+            </label>
+            <div class="input-group">
+              <input
+                :class="{ 'is-invalid': errors.has('name') }"
+                class="form-control"
+                id="name"
+                name="name"
+                placeholder="Enter name"
+                required
+                type="text"
+                v-model="detail.name"
+                v-validate="'required'"
+              />
+            </div>
+            <small class="text-danger mt-1" v-if="errors.has('name')">{{ errors.first('name') }}</small>
           </div>
 
-          <!--          <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>-->
+          <div class="input-group mb-3 col-md-12">
+            <label class="text-capitalize ml-3" for="code">
+              code
+              <small
+                :class="!detail.code || errors.has('code') ? 'text-danger' : 'text-success' "
+              >*</small>
+            </label>
+            <div class="input-group">
+              <input
+                :class="{ 'is-invalid': errors.has('code') }"
+                class="form-control"
+                id="code"
+                name="code"
+                placeholder="Enter code"
+                required
+                type="text"
+                v-model="detail.code"
+                v-validate="'required'"
+              />
+            </div>
+            <small class="text-danger mt-1" v-if="errors.has('name')">{{ errors.first('name') }}</small>
+          </div>
 
 
-          <!--          <label for="name" class="text-capitalize ml-3">-->
-          <!--            name-->
-          <!--            <small-->
-          <!--              :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "-->
-          <!--            >*</small>-->
-          <!--          </label>-->
-          <!--          <div class="input-group">-->
-          <!--            <input-->
-          <!--              type="text"-->
-          <!--              id="name"-->
-          <!--              name="name"-->
-          <!--              required-->
-          <!--              class="form-control"-->
-          <!--              placeholder="Enter name"-->
-          <!--              v-model="detail.name"-->
-          <!--              v-validate="'required'"-->
-          <!--              :class="{ 'is-invalid': errors.has('name') }"-->
-          <!--            />-->
-          <!--          </div>-->
-          <!--          <small v-if="errors.has('name')" class="text-danger mt-1">{{ errors.first('name') }}</small>-->
-        </div>
-
-
-        <div class="input-group mb-3 col-md-12">
-          <label for="description" class="text-capitalize ml-3">
-            Description
-            <small
-              :class="!detail.description || errors.has('description') ? 'text-danger' : 'text-success' "
-            >*</small>
-          </label>
-          <div class="input-group">
+          <div class="input-group mb-3 col-md-12">
+            <label class="text-capitalize ml-3" for="description">
+              Description
+              <small
+                :class="!detail.description || errors.has('description') ? 'text-danger' : 'text-success' "
+              >*</small>
+            </label>
+            <div class="input-group">
             <textarea
+              :class="{ 'is-invalid': errors.has('description') }"
               class="form-control"
-              required
-              placeholder="Enter description"
-              name="description"
-              id="description"
               cols="20"
+              id="description"
+              name="description"
+              placeholder="Enter description"
+              required
               rows="5"
               v-model="detail.description"
               v-validate="'required'"
-              :class="{ 'is-invalid': errors.has('description') }"
             />
+            </div>
+            <small
+              class="text-danger mt-1"
+              v-if="errors.has('description')"
+            >{{ errors.first('description') }}</small>
           </div>
-          <small
-            v-if="errors.has('description')"
-            class="text-danger mt-1"
-          >{{ errors.first('description') }}</small>
-        </div>
 
-        <div class="input-group mb-3">
-          <label for="name" class="text-capitalize ml-3">
-            Active
-            <!-- <small
-                          :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-            >*</small>-->
-          </label>
-          <div class="input-group col-md-12">
-            <switches
-              v-model="detail.is_active"
-              v-bind:label="detail.is_active == true ? 'Active' : 'Deactive'"
-              theme="bulma"
-              color="green"
-              type-bold="false"
-            ></switches>
+          <div class="input-group mb-3">
+            <label class="text-capitalize ml-3" for="name">
+              category image
+            </label>
+            <div class="input-group col-md-12">
+              <div class="input-group pull-left">
+                <vue-upload-multiple-image
+                  :data-images="detail.images"
+                  @edit-image="editImage"
+                  @upload-success="uploadImageSuccess"
+                  browseText="Select category Images"
+                  dragText="Browse Image"
+                  popupText="Uploaded Image"
+                  primaryText="Image"
+                />
+                <!--  maxImage=1 -->
+              </div>
+            </div>
           </div>
-          <!-- <small
-                        v-if="errors.has('name')"
-                        class="text-danger mt-1"
-          >{{ errors.first('name') }}</small>-->
+
+          <div class="input-group mb-3">
+            <label class="text-capitalize ml-3" for="name">
+              Active
+              <!-- <small
+                            :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+              >*</small>-->
+            </label>
+            <div class="input-group col-md-12">
+              <switches
+                color="green"
+                theme="bulma"
+                type-bold="false"
+                v-bind:label="detail.is_active === true ? 'Active' : 'Deactive'"
+                v-model="detail.is_active"
+              />
+            </div>
+            <!-- <small
+                          v-if="errors.has('name')"
+                          class="text-danger mt-1"
+            >{{ errors.first('name') }}</small>-->
+          </div>
         </div>
       </form>
     </b-modal>
@@ -315,12 +351,9 @@
 
 <script>
   import Services from "../../../../Services/apiServices";
-  import {ApiCollections, LIMITS, baseURL} from "../../../../config/config";
+  import {ApiCollections, baseURL, LIMITS} from "../../../../config/config";
   import Switches from "vue-switches";
   import PageHeader from "../../../../components/custom/PageHeader";
-  import {async} from "q";
-  import apiServices from "../../../../Services/apiServices";
-
   import VueUploadMultipleImage from "vue-upload-multiple-image";
 
   export default {
@@ -328,10 +361,12 @@
     components: {
       Switches,
       VueUploadMultipleImage,
+
       PageHeader
     },
     data: function () {
       return {
+        activeCategory: 1,
         baseURL: baseURL,
         allSelectedData: false,
         selectedIds: [],
@@ -340,13 +375,12 @@
         pageLimits: [],
         detail: {
           is_parent: false,
-          parent_id: "",
+          parent_id: null,
           name: "",
-          code: "",
-          image: "",
+          images: [],
           description: "",
           is_active: true,
-         },
+        },
         search: PageHeader.data.search,
         showModal: false,
         totalCount: 0,
@@ -366,8 +400,52 @@
     computed: {},
     // computed
     methods: {
+
+      stateChange(key, value) {
+        // if (this.detail && this.detail[key]) {
+        // this.detail[key] = value;
+        this.detail.is_parent = value;
+        // console.log("checkbox", this.detail[key])
+
+        // }
+      },
+
+      /** Start Image Uploading methods */
+      toDataURL(url, callback) {
+        let xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          let reader = new FileReader();
+          reader.onloadend = function () {
+            callback(reader.result);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.open("GET", url);
+        xhr.responseType = "blob";
+        xhr.send();
+      },
+
+      uploadImageSuccess(formData, index, fileList) {
+
+        this.detail.images = fileList;
+      },
+      beforeRemove: (index, done, fileList) => {
+
+        this.detail.images = fileList;
+
+        let r = confirm("remove image");
+        if (r === true) {
+          done();
+        } else {
+        }
+      },
+      editImage(formData, index, fileList) {
+
+      },
+      /** End Image Uploading methods */
+
       async deleteAllFn() {
-        var request = {
+        let request = {
           ids: this.selectedIds
         };
 
@@ -388,7 +466,7 @@
             if (result.value) {
               if (this.selectedIds && this.selectedIds.length) {
                 let res = await Services.call(
-                  ApiCollections.products_delete_multiple
+                  ApiCollections.category_delete_multiple
                 ).deleteMany(request);
 
                 /**
@@ -422,10 +500,12 @@
           this.category_list = [];
         }
 
-        console.log("Categ", this.category_list);
+
       },
 
       async getSubCategoriesList(parent_id = null) {
+        // activeCategory
+        this.activeCategory = parent_id;
         this.subCategoriesList = [];
         let res = await Services.call(ApiCollections.category_list).post({
           parent_id: parent_id
@@ -437,7 +517,6 @@
           this.subCategoriesList = [];
         }
 
-        console.log("Subcategories", this.subCategoriesList);
       },
 
 
@@ -496,7 +575,7 @@
             /** check for all selected count and total count */
             if (
               this.selectedIds &&
-              this.selectedIds.length == this.lists.length
+              this.selectedIds.length === this.lists.length
             ) {
               this.allSelectedData = true;
             }
@@ -509,41 +588,34 @@
 
       /** get details by id */
       async getDetails(id) {
-        let res = await Services.call(ApiCollections.products_get).getOne(id);
+        let res = await Services.call(ApiCollections.category_get).getOne(id);
 
-        if (res && res.success && res.success == true) {
+        if (res && res.success && res.success === true) {
           this.detail = res.data;
+          console.log("Chec Iamge", res.data.image);
           let imageUrls = res.data.image;
 
           if (imageUrls && imageUrls.length > 0) {
             this.detail.images = [];
-            imageUrls.forEach((imageUrl, index) => {
-              this.detail.images[index] = {
-                name: `image${index}.png`,
+            let firstImage = this.$_.first(imageUrls);
+              this.detail.images = [{
+                name: `image${0}.png`,
                 // name: "vrushik1.png",
-                path: imageUrl,
+                path: firstImage,
                 highlight: 1,
                 default: 1
-              };
+              }];
 
-              // this.toDataURL(imageUrl, dataUrl => {
-              //   let imageDataIs = {
-              //     name: `image${index}.png`,
-              //     path: dataUrl,
-              //     highlight: 1,
-              //     default: 1
-              //   };
-              //   this.detail.images.push(imageDataIs);
-              // });
-            });
-            console.log("Data are", this.detail.images);
+            // imageUrls.forEach((imageUrl, index) => {
+            //   this.detail.images[index] = {
+            //     name: `image${index}.png`,
+            //     // name: "vrushik1.png",
+            //     path: imageUrl,
+            //     highlight: 1,
+            //     default: 1
+            //   };
+            // });
           }
-
-          //         this.detail.images.map(imageUrl => () {
-          //           toDataURL('https://www.gravatar.com/avatar/d50c83cc0c6523b4d3f6085295c953e0', function(dataUrl) {
-          //   console.log('RESULT:', dataUrl)
-          // }),
-          //         });
 
           this.$Progress.finish();
           // Services.notify("s", res.message);
@@ -586,7 +658,7 @@
           Services.notify("e", "Record details not found");
           return false;
         }
-        let res = await Services.call(ApiCollections.products_delete).delete(
+        let res = await Services.call(ApiCollections.category_delete).delete(
           list.id
         );
         if (res && res.success && res.success == true) {
@@ -632,77 +704,65 @@
           };
           reader.readAsDataURL(input.files[0]);
         }
-
-        // console.log(this.detail.image);
       },
       async submitData() {
         let formData = new FormData();
 
-        if (this.detail.images && this.detail.images.length) {
-          /** start  */
+        let firstFile = this.$_.first(this.detail.images);
+        let index = firstFile.path.search("data:image");
+        if (index >= 0) {
+          let arr = firstFile.path.split(",");
 
-          for (var i = 0; i < this.detail.images.length; i++) {
-            let file = this.detail.images[i];
-            var index = file.path.search("data:image");
-            if (index >= 0) {
-              var arr = file.path.split(",");
-              console.log("Arr 1", i, arr);
-
-              var mime = arr[0].match(/:(.*?);/)[1];
-              var bstr = atob(arr[1]);
-              var n = bstr.length;
-              var u8arr = new Uint8Array(n);
-              while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-              }
-              formData.append(
-                "images[]",
-                new File([u8arr], file.name, {type: mime})
-              );
-            }
+          let mime = arr[0].match(/:(.*?);/)[1];
+          let bstr = atob(arr[1]);
+          let n = bstr.length;
+          let u8arr = new Uint8Array(n);
+          while (n--) {
+            u8arr[n] = bstr.charCodeAt(n);
           }
+          formData.append(
+            "image",
+            new File([u8arr], firstFile.name, {type: mime})
+          );
         }
 
+        console.log("Add", formData);
+
+        if (this.detail && this.detail.parent_id) {
+          formData.append("parent_id", this.detail.parent_id);
+        }
         formData.append("name", this.detail.name);
-        formData.append("category_id", this.detail.category_id);
-        formData.append("price", this.detail.price);
-        formData.append("size", this.detail.size);
-        formData.append("color", this.detail.color);
+        formData.append("code", this.detail.code);
         formData.append("description", this.detail.description);
         formData.append("is_active", this.detail.is_active);
-        // if (this.detail.image) {
-        //   formData.append("image", this.detail.image);
-        // }
-        /*       if (this.selectedFile) {
-          formData.append("image", this.selectedFile);
-        } */
-        // if (this.detail.id) {
-        //   formData.append("id", this.detail.id);
-        // }
 
         this.$Progress.start();
         if (this.detail && this.detail.id) {
-          var apiObject = this.$_.clone(ApiCollections.products_update);
+          let apiObject = this.$_.clone(ApiCollections.category_update);
           apiObject.url += this.detail.id;
 
           let res = await Services.call(apiObject).post(formData);
 
           /** set update data  */
-          if (res && res.success && res.success == true) {
-            var index = this.$_.findIndex(this.lists, {
+          if (res && res.success && res.success === true) {
+            let index = this.$_.findIndex(this.lists, {
               id: this.detail.id
             });
 
             /** stop loader */
             this.$Progress.finish();
-            if (index == -1) {
+            if (index === -1) {
               Services.notify("e", "Record not found in listing");
               return false;
             }
             // this.lists.slice(index, 1, this.$_.clone(res.data));
 
-            this.lists[index] = this.$_.clone(res.data);
-            console.log("Updated Record", res.data, this.lists[index]);
+            if (res.data.parent_id == null) {
+              this.lists[index] = this.$_.clone(res.data);
+            } else {
+              this.subCategoriesList[index] = this.$_.clone(res.data);
+            }
+            // this.lists[index] = this.$_.clone(res.data);
 
             Services.notify("s", res.message);
             this.showModal = false;
@@ -713,12 +773,17 @@
           }
         } else {
           /** create data */
-          let res = await Services.call(ApiCollections.products_create).post(
+          let res = await Services.call(ApiCollections.category_create).post(
             formData
           );
           /** set data  */
-          if (res && res.success && res.success == true) {
-            this.lists.unshift(res.data);
+          if (res && res.success && res.success === true) {
+            if (res.data.parent_id == null) {
+              this.lists.unshift(res.data);
+            } else {
+              if (this.activeCategory && this.activeCategory === res.data.parent_id)
+                this.subCategoriesList.unshift(res.data);
+            }
             this.totalCount++;
             this.$Progress.finish();
             Services.notify("s", res.message);
@@ -788,20 +853,20 @@
         }
       },
       async statusChange(key, value, id) {
-        var request = {
+        let request = {
           id: id
         };
-        if (key == "is_active") {
+        if (key === "is_active") {
           request.is_active = value;
         }
 
         let res = await Services.call(
-          ApiCollections.products_update_status_change
+          ApiCollections.category_update_status_change
         ).post(request);
 
         /** set update data  */
         if (res && res.success && res.success == true) {
-          var index = this.$_.findIndex(this.lists, {id: id});
+          let index = this.$_.findIndex(this.lists, {id: id});
 
           /** stop loader */
           this.$Progress.finish();
@@ -835,13 +900,13 @@
       }
     },
     watch: {
-      // "detail.name"(newVal) {
-      //     if (newVal) {
-      //         this.detail.code = this.$_.clone(
-      //             newVal.replace(/ /g, "_").toUpperCase()
-      //         );
-      //     }
-      // },
+      "detail.name"(newVal) {
+        if (newVal) {
+          this.detail.code = this.$_.clone(
+            newVal.replace(/ /g, "_").toUpperCase()
+          );
+        }
+      },
       page: function (val) {
         this.pageChangeFn(parseInt(val));
       }
