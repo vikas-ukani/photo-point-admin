@@ -61,8 +61,8 @@
                         height="150"
                         multiple
                         v-bind:alt="list.name"
-                        v-bind:src="list.image[0]"
-                        v-if="list.image && list.image.length && list.image[0]"
+                        v-bind:src="list.image"
+                        v-if="list.image && list.image"
                         width="150"
                       />
                     </td>
@@ -219,7 +219,7 @@
               >
                 <option
                   :key="index" :value="list.id"
-                  v-for="(list, index) in category_list"
+                  v-for="(list, index) in lists"
                 >
                   {{list.name}}
                 </option>
@@ -310,6 +310,7 @@
               <div class="input-group pull-left">
                 <vue-upload-multiple-image
                   :data-images="detail.images"
+                  :multiple=false
                   @edit-image="editImage"
                   @upload-success="uploadImageSuccess"
                   browseText="Select category Images"
@@ -390,12 +391,12 @@
       };
     },
     mounted() {
-      this.getCategoryList(); // categories_list
+      // this.getCategoryList(); // categories_list
     },
     beforeMount() {
       this.limit = LIMITS[0].value;
       this.pageLimits = LIMITS;
-      this.getAllList();
+      this.getCategoryList();
     },
     computed: {},
     // computed
@@ -440,7 +441,9 @@
         }
       },
       editImage(formData, index, fileList) {
-
+        // console.log("Edit Image ", formData, index, _.first(fileList));
+        this.detail.images[index] = _.first(fileList);
+        // this.detail.images = fileList;
       },
       /** End Image Uploading methods */
 
@@ -476,7 +479,7 @@
                   this.$Progress.finish();
                   this.selectedIds = [];
                   this.allSelectedData = false;
-                  this.getAllList();
+                  this.getCategoryList();
 
                   Services.notify("s", res.message);
                 } else {
@@ -488,50 +491,19 @@
           });
       },
 
-      async getCategoryList() {
-        let res = await Services.call(ApiCollections.category_list).post({
-          is_parent: true
-        });
-
-        if (res && res.success === true) {
-          this.category_list = res.data.list;
-          this.getSubCategoriesList(_.first(this.category_list).id)
-        } else {
-          this.category_list = [];
-        }
-
-
-      },
-
-      async getSubCategoriesList(parent_id = null) {
-        // activeCategory
-        this.activeCategory = parent_id;
-        this.subCategoriesList = [];
-        let res = await Services.call(ApiCollections.category_list).post({
-          parent_id: parent_id
-        });
-
-        if (res && res.success === true) {
-          this.subCategoriesList = res.data.list;
-        } else {
-          this.subCategoriesList = [];
-        }
-
-      },
-
 
       changePageLimits(event) {
         this.limit = event.target.value;
         this.selectedIds = [];
         this.allSelectedData = false;
-        this.getAllList();
+        this.getCategoryList();
       },
       /**
        * Set to All Check Box true or false
        */
       selectedAllRecords(allSelectedData) {
-        var selIds = [];
-        if (allSelectedData == true) {
+        let selIds = [];
+        if (allSelectedData === true) {
           this.$_.map(this.lists, function (list) {
             list.is_selected = allSelectedData;
             selIds.push(list.id);
@@ -550,8 +522,8 @@
        */
       selectCheckBox(id, value) {
         if (id) {
-          var index = this.$_.findIndex(this.lists, {id: id});
-          var data = this.$_.findWhere(this.lists, {id: id});
+          let index = this.$_.findIndex(this.lists, {id: id});
+          let data = this.$_.findWhere(this.lists, {id: id});
 
           if (!data) {
             Services.notify("e", "Records not found");
@@ -561,15 +533,15 @@
           data.is_selected = value;
           /** refresh selected object */
           this.lists.splice(index, 1, data);
-          if (value == false) {
+          if (value === false) {
             /** remove id from all selected ids array */
             if (this.selectedIds && this.selectedIds.length) {
               this.selectedIds = _.reject(this.selectedIds, function (num) {
-                return num == id;
+                return num === id;
               });
             }
             this.allSelectedData = false;
-          } else if (value == true) {
+          } else if (value === true) {
             this.selectedIds.push(id);
 
             /** check for all selected count and total count */
@@ -586,37 +558,27 @@
         }
       },
 
+
       /** get details by id */
       async getDetails(id) {
         let res = await Services.call(ApiCollections.category_get).getOne(id);
 
         if (res && res.success && res.success === true) {
           this.detail = res.data;
-          console.log("Chec Iamge", res.data.image);
           let imageUrls = res.data.image;
 
           if (imageUrls && imageUrls.length > 0) {
             this.detail.images = [];
-            let firstImage = this.$_.first(imageUrls);
-              this.detail.images = [{
-                name: `image${0}.png`,
-                // name: "vrushik1.png",
-                path: firstImage,
-                highlight: 1,
-                default: 1
-              }];
-
             // imageUrls.forEach((imageUrl, index) => {
-            //   this.detail.images[index] = {
-            //     name: `image${index}.png`,
-            //     // name: "vrushik1.png",
-            //     path: imageUrl,
-            //     highlight: 1,
-            //     default: 1
-            //   };
+            this.detail.images[0] = {
+              name: `image${0}.png`,
+              // name: "vrushik1.png",
+              path: imageUrls,
+              highlight: 1,
+              default: 1
+            };
             // });
           }
-
           this.$Progress.finish();
           // Services.notify("s", res.message);
           this.showModal = true;
@@ -625,7 +587,6 @@
           Services.notify("e", res.message);
         }
       },
-
       /**
        * Delete Confirmation
        */
@@ -661,12 +622,12 @@
         let res = await Services.call(ApiCollections.category_delete).delete(
           list.id
         );
-        if (res && res.success && res.success == true) {
-          var index = this.$_.findIndex(this.lists, {id: list.id});
+        if (res && res.success && res.success === true) {
+          let index = this.$_.findIndex(this.lists, {id: list.id});
 
           /** stop loader */
           this.$Progress.finish();
-          if (index == -1) {
+          if (index === -1) {
             Services.notify("e", "Record not found in listing");
             return false;
           }
@@ -697,9 +658,9 @@
       handleFileUpload(e) {
         let input = event.target;
         if (input.files && input.files[0]) {
-          var reader = new FileReader();
+          let reader = new FileReader();
           reader.onload = e => {
-            this.detail.image = e.target.result;
+            this.detail.images = e.target.result;
             this.selectedFile = input.files[0];
           };
           reader.readAsDataURL(input.files[0]);
@@ -709,6 +670,7 @@
         let formData = new FormData();
 
         let firstFile = this.$_.first(this.detail.images);
+        console.log("Image  id ", this.detail.images, this.detail.id);
         let index = firstFile.path.search("data:image");
         if (index >= 0) {
           let arr = firstFile.path.split(",");
@@ -726,7 +688,6 @@
           );
         }
 
-        console.log("Add", formData);
 
         if (this.detail && this.detail.parent_id) {
           formData.append("parent_id", this.detail.parent_id);
@@ -743,11 +704,25 @@
 
           let res = await Services.call(apiObject).post(formData);
 
-          /** set update data  */
+          /** set update data */
           if (res && res.success && res.success === true) {
-            let index = this.$_.findIndex(this.lists, {
-              id: this.detail.id
-            });
+            let index;
+            if (this.detail && this.detail.parent_id) {
+              // this.subCategoriesList[index] = this.$_.clone(res.data);
+              index = this.$_.findIndex(this.subCategoriesList, {
+                id: this.detail.id
+              });
+            } else if (this.detail.parent_id == null) {
+              // this.lists[index] = this.$_.clone(res.data);
+              index = this.$_.findIndex(this.lists, {
+                id: this.detail.id
+              });
+            }
+
+            //subCategoriesList
+            // let index = this.$_.findIndex(this.lists, {
+            //   id: this.detail.id
+            // });
 
             /** stop loader */
             this.$Progress.finish();
@@ -763,7 +738,6 @@
               this.subCategoriesList[index] = this.$_.clone(res.data);
             }
             // this.lists[index] = this.$_.clone(res.data);
-
             Services.notify("s", res.message);
             this.showModal = false;
             this.detail = {};
@@ -817,12 +791,16 @@
         };
 
         /** if search found then send to request */
-        if (search && search.length > 0) {
-          request.search = search;
-        } else if (this.search && this.search.length > 0) {
-          request.search = this.search;
-        }
-
+        /*       if (search && search.length > 0) {
+                 delete request.is_parent;
+                 request.parent_id = this.activeCategory;
+                 request.search = search;
+               } else if (this.search && this.search.length > 0) {
+                 delete request.is_parent;
+                 request.parent_id = this.activeCategory;
+                 request.search = this.search;
+               }*/
+        console.log("Final Request ", request);
         /** start progress here */
         this.$Progress.start();
 
@@ -833,25 +811,99 @@
 
         /** check error or success response */
         if (res && res.success && res.success === true) {
-          this.lists = res.data.list;
+          // if (search || this.search){
+          this.getSubCategoriesList(this.activeCategory, search ? search : this.search);
+          // }
+          // this.lists = this._.findWhere(res.data, {parent_id: null});
+          /*         this.subCategoriesList = _.clone(_.reject(res.data.list, function (data) {
+                     return data.parent_id === null || data.parent_id === 0
+                   }));*/
+          // this.lists = _.clone(_.reject(res.data.list, function (data) {
+          //   return data.parent_id > 0
+          // }));
 
-          this.totalCount = parseInt(res.data.count);
+          /*   if (!search && !this.search) {
+               if (this.lists && this.lists[0] && this.lists[0].id) {
+                 this.getSubCategoriesList(this.activeCategory)
+               }
+             }*/
 
-          if (this.lists && this.lists.length) {
-            /** to set default check box is false */
-            this.$_.each(this.lists, function (value, key) {
-              value.is_selected = false;
-            });
-          }
+          // console.log("List", this.subCategoriesList, this.lists, res.data.list);
+          // this.subCategoriesList = _.clone(this._.findWhere(res.data, function (data) {
+          //   return data.parent_id > 0
+          // }));
+          // console.log("Subcategory ", this.subCategoriesList);
+
+
+          // if (this.activeCategory) {
+          //   this.subCategoriesList = res.data.list;
+          //   // this.totalCount = parseInt(res.data.count);
+          //   if (this.subCategoriesList && this.subCategoriesList.length) {
+          //     /** to set default check box is false */
+          //     this.$_.each(this.subCategoriesList, function (value, key) {
+          //       value.is_selected = false;
+          //     });
+          //   }
+          // } else{
+          //   this.lists = res.data.list;
+          //   this.totalCount = parseInt(res.data.count);
+          //   if (this.lists && this.lists.length) {
+          //     /** to set default check box is false */
+          //     this.$_.each(this.lists, function (value, key) {
+          //       value.is_selected = false;
+          //     });
+          //   }
+          // }
 
           this.$Progress.finish();
         } else {
-          this.lists = [];
+          console.log("Else Part");
+          // this.lists = [];
           this.totalCount = 0;
           this.$Progress.fail();
           // Services.notify("e", res.message);
         }
       },
+
+      async getCategoryList() {
+        let res = await Services.call(ApiCollections.category_list).post({
+          is_parent: true
+        });
+
+        if (res && res.success === true) {
+          this.lists = res.data.list;
+          await this.getSubCategoriesList(_.first(this.lists).id)
+        } else {
+          this.lists = [];
+        }
+      },
+
+      async getSubCategoriesList(parent_id = null, search = null) {
+        // activeCategory
+        this.activeCategory = parent_id;
+        console.log(this.search);
+        delete this.search;
+        this.subCategoriesList = [];
+        let request = {
+          parent_id: parent_id
+        };
+        if (search && search.length > 0) {
+          request.search = search
+        }
+        if (this.search && this.search.length > 0) {
+          request.search = this.search
+        }
+        let res = await Services.call(ApiCollections.category_list).post(request);
+
+        if (res && res.success === true) {
+          this.subCategoriesList = res.data.list;
+        } else {
+          this.subCategoriesList = [];
+        }
+
+      },
+
+
       async statusChange(key, value, id) {
         let request = {
           id: id
@@ -865,16 +917,28 @@
         ).post(request);
 
         /** set update data  */
-        if (res && res.success && res.success == true) {
-          let index = this.$_.findIndex(this.lists, {id: id});
+        if (res && res.success && res.success === true) {
+          let index;
+          if (res.data && res.data.parent_id) {
+            index = this.$_.findIndex(this.subCategoriesList, {id: id});
+          } else if (res.data.parent_id == null) {
+            index = this.$_.findIndex(this.lists, {id: id});
+          }
 
           /** stop loader */
           this.$Progress.finish();
-          if (index == -1) {
+          if (index === -1) {
             Services.notify("e", "Record not found in listing");
             return false;
           }
-          this.lists.slice(index, 1, res.data);
+          if (res.data && res.data.parent_id) {
+            this.subCategoriesList.slice(index, 1, res.data);
+            // let index = this.$_.findIndex(this.subCategoriesList, {id: id});
+          } else if (res.data == null) {
+            this.lists.slice(index, 1, res.data);
+            // let index = this.$_.findIndex(this.lists, {id: id});
+          }
+          // this.lists.slice(index, 1, res.data);
 
           Services.notify("s", res.message);
         } else {

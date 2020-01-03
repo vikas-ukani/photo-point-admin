@@ -126,7 +126,7 @@ export default {
       /** start loader */
       this.$Progress.start();
       let res = await apiServices
-        .call(ApiCollections.forgorPassword)
+        .call(ApiCollections.forgotPassword)
         .post(this.vks.login);
       /**
        * True Response

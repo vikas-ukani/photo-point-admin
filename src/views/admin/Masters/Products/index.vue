@@ -578,7 +578,7 @@
       async getDetails(id) {
         let res = await Services.call(ApiCollections.products_get).getOne(id);
 
-        if (res && res.success && res.success == true) {
+        if (res && res.success && res.success === true) {
           this.detail = res.data;
           let imageUrls = res.data.image;
 
