@@ -28,6 +28,7 @@ import Products from "../views/admin/Masters/Products";
 import FeatureProducts from "../views/admin/Masters/FeatureProducts";
 import Offers from "../views/admin/Masters/Offers";
 import Category from "../views/admin/Masters/Category";
+import AddProduct from "../views/admin/Masters/Products/AddProduct";
 // import TrainingActivities from "../views/admin/Masters/TrainingActivities";
 
 // Containers
@@ -120,6 +121,12 @@ export default new Router({
           path: "/products", // route_prefix +
           name: "Products",
           component: Products,
+          beforeEnter: ifAuthenticated
+        },
+        {
+          path: "/add-product", // route_prefix +
+          name: "AddProducts",
+          component: AddProduct,
           beforeEnter: ifAuthenticated
         },
         {

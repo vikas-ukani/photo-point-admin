@@ -3,12 +3,13 @@
     <div class>
       <page-header
         :is_delete_all="true"
-        :is_show_add_button="false"
-        :is_show_model="true"
+        :is_show_add_button="true"
+        :is_show_model="false"
         :is_show_serach="true"
         :search="search"
         :selected_ids="selectedIds"
         :title="$route.name"
+        add_route="/add-product"
         :titleCounter="totalCount"
       />
       <!-- :add_route="$route.path + '-add'" -->
@@ -153,7 +154,7 @@
               aria-controls="my-table"
               class="col-xl-4 col-sm-4 col-md-4 col-xs-4"
               v-model="page"
-            ></b-pagination>
+            />
           </div>
         </div>
       </div>
@@ -401,7 +402,7 @@
           color: "",
           description: "",
           is_active: true,
-          images: []
+            images: []
         },
         search: PageHeader.data.search,
         showModal: false,

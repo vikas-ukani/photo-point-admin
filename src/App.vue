@@ -40,4 +40,8 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
 @import "./assets/scss/style";
 
 @import "~/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
+
+@import '~vue-search-select/dist/VueSearchSelect.css';
+
+
 </style>

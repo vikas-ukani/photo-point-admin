@@ -358,7 +358,7 @@
   import VueUploadMultipleImage from "vue-upload-multiple-image";
 
   export default {
-    name: "Products",
+    name: "Category",
     components: {
       Switches,
       VueUploadMultipleImage,

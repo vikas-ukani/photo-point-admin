@@ -43,6 +43,7 @@
     "vue-progressbar": "^0.7.5",
     "vue-resource": "^1.5.1",
     "vue-router": "^3.0.6",
+    "vue-search-select": "^2.9.3",
     "vue-sweetalert2": "^2.1.1",
     "vue-switches": "^2.0.1",
     "vue-underscore": "^0.1.4",
