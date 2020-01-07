@@ -116,6 +116,13 @@ export const ApiCollections = {
   feature_product_delete: {method: "get", url: api_prefix + "feature-product-delete/"},
   feature_product_update_status_change: {method: "POST", url: api_prefix + "feature-product-status-change"},
 
+  /**
+   * Product Common Attribute APIs
+   */
+  common_products_attributes_list: {method: "POST", url: api_prefix + "common-products-attributes-list"},
+
+
+
 
   /** products apis */
   products_list: {method: "POST", url: api_prefix + "products-list"},

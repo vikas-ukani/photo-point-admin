@@ -12,145 +12,132 @@
 
       <div class="card card-body">
         <form class="row" enctype="multipart/form-data" method="post" name="addEditForm" novalidate>
-          <div class="input-group mb-3 col-md-4">
-            <label class="text-capitalize ml-3 font-weight-bold">
-              Main Category
-              <small
-                :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-              >*</small>
-            </label>
-            {{main_category_id}}
-            <!-- object value -->
-            <model-select :options="category_list"
-                          @change="getCategoryListById(main_category_id, 'subcategory_list')"
-                          placeholder="Select Main category"
-                          v-model="main_category_id"
-            >
-              <!--              @click="getCategoryListById(main_category_id, 'subcategory_list')"-->
-            </model-select>
-          </div>
 
-          <div class="input-group mb-3 col-md-4">
-            <div class="col-md-12" v-if="subcategory_list && subcategory_list.length">
+          <div class="input-group row col-md-12 ">
+
+            <div class="mb-3  col-md-12 font-dark ">
+              <h5>Step 1: Select a category.</h5>
+            </div>
+
+            <div class=" mb-3 col-md-4">
               <label class="text-capitalize ml-3 font-weight-bold">
-                Subcategory
+                Main Category
                 <small
                   :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
                 >*</small>
               </label>
+              {{main_category_id}}
               <!-- object value -->
-              <model-select :options="subcategory_list"
-                            placeholder="Select Sub category"
-                            v-model="subcategory_id">
+              <model-select :options="category_list"
+                            @change="getCategoryListById(main_category_id, 'subcategory_list')"
+                            placeholder="Select Main category"
+                            v-model="main_category_id"
+              >
+                <!--              @click="getCategoryListById(main_category_id, 'subcategory_list')"-->
               </model-select>
+            </div>
+
+            <div class="  mb-3 col-md-4">
+              <div class="col-md-12" v-if="subcategory_list && subcategory_list.length">
+                <label class="text-capitalize ml-3 font-weight-bold">
+                  Subcategory
+                  <small
+                    :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+                  >*</small>
+                </label>
+                <!-- object value -->
+                <model-select :options="subcategory_list"
+                              placeholder="Select Sub category"
+                              v-model="subcategory_id">
+                </model-select>
+              </div>
+            </div>
+
+            <div class="  mb-3 col-md-4">
+              <div class="col-md-12" v-if="child_category_list && child_category_list.length">
+                <label class="text-capitalize ml-3 font-weight-bold">
+                  child category
+                  <small
+                    :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+                  >*</small>
+                </label>
+                <!--  {{main_category_id}}-->
+                <!-- object value -->
+                <model-select :options="child_category_list"
+                              placeholder="Select clild category"
+                              v-model="clild_category_id">
+                </model-select>
+              </div>
             </div>
           </div>
 
-          <div class="input-group mb-3 col-md-4">
-            <div  class="col-md-12" v-if="child_category_list && child_category_list.length">
-              <label class="text-capitalize ml-3 font-weight-bold">
-                child category
+          <!--           v-if="showProductDetails ? showProductDetails : clild_category_id"-->
+          <div class="input-group col-12 mt-3 border-top pt-3  " id="sticky-reference">
+
+            <h5 class="mb-3">Step 2: Edit Product Information</h5>
+            <div class="pb-2 border-bottom border-dark mb-4 col-12">
+              <div class="form-group row">
+                <div class="input-group pl-0 mb-3 col-md-12">
+                  <label class="text-capitalize " for="name">
+                    name
+                    <small
+                      :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+                    >*</small>
+                  </label>
+                  <div class="input-group">
+                    <input
+                      :class="{ 'is-invalid': errors.has('name') }"
+                      class="form-control"
+                      id="name"
+                      name="name"
+                      placeholder="Enter name"
+                      required
+                      type="text"
+                      v-model="detail.name"
+                      v-validate="'required'"
+                    />
+                  </div>
+                  <small class="text-danger mt-1" v-if="errors.has('name')">{{ errors.first('name') }}</small>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-3 mb-3  col-md-12 font-dark ">
+              <h5>Step 3: Product attributes.</h5>
+            </div>
+
+
+            <div class="input-group mb-3 col-md-6">
+              <label class="text-capitalize ml-3" for="price">
+                price
                 <small
-                  :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+                  :class="!detail.price || errors.has('price') ? 'text-danger' : 'text-success' "
                 >*</small>
               </label>
-              <!--  {{main_category_id}}-->
-              <!-- object value -->
-              <model-select :options="child_category_list"
-                            placeholder="Select clild category"
-                            v-model="clild_category_id">
-              </model-select>
+              <div class="input-group">
+                <input
+                  :class="{ 'is-invalid': errors.has('price') }"
+                  class="form-control"
+                  id="price"
+                  name="price"
+                  placeholder="Enter price"
+                  required
+                  type="text"
+                  v-model="detail.price"
+                  v-validate="'required|numeric'"
+                />
+              </div>
+              <small class="text-danger mt-1" v-if="errors.has('price')">{{ errors.first('price') }}</small>
             </div>
-          </div>
 
-
-
-
-          <div class="input-group mb-3 col-md-6">
-            <label class="text-capitalize ml-3" for="name">
-              name
-              <small
-                :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-              >*</small>
-            </label>
-            <div class="input-group">
-              <input
-                :class="{ 'is-invalid': errors.has('name') }"
-                class="form-control"
-                id="name"
-                name="name"
-                placeholder="Enter name"
-                required
-                type="text"
-                v-model="detail.name"
-                v-validate="'required'"
-              />
-            </div>
-            <small class="text-danger mt-1" v-if="errors.has('name')">{{ errors.first('name') }}</small>
-          </div>
-
-          <div class="input-group mb-3 col-md-6">
-            <label class="text-capitalize ml-3" for="category">
-              category
-              <small
-                :class="!detail.category || errors.has('category') ? 'text-danger' : 'text-success' "
-              >*</small>
-            </label>
-            <div class="input-group">
-              <!--  @change="changePageLimits($event)" -->
-              <!--              <select class="form-control" v-model="detail.category_id">-->
-              <!--                <option-->
-              <!--                  :key="index"-->
-              <!--                  :value="list.id"-->
-              <!--                  v-for="(list, index) in category_list"-->
-              <!--                  v-show="category_list && category_list.length"-->
-              <!--                >{{list.name}}-->
-              <!--                </option>-->
-
-              <!--                <option-->
-              <!--                  selected="true"-->
-              <!--                  v-if="!category_list || !category_list.length"-->
-              <!--                >No any category found-->
-              <!--                </option>-->
-              <!--              </select>-->
-            </div>
-            <small
-              class="text-danger mt-1"
-              v-if="errors.has('category')"
-            >{{ errors.first('category') }}</small>
-          </div>
-
-          <div class="input-group mb-3 col-md-6">
-            <label class="text-capitalize ml-3" for="price">
-              price
-              <small
-                :class="!detail.price || errors.has('price') ? 'text-danger' : 'text-success' "
-              >*</small>
-            </label>
-            <div class="input-group">
-              <input
-                :class="{ 'is-invalid': errors.has('price') }"
-                class="form-control"
-                id="price"
-                name="price"
-                placeholder="Enter price"
-                required
-                type="text"
-                v-model="detail.price"
-                v-validate="'required|numeric'"
-              />
-            </div>
-            <small class="text-danger mt-1" v-if="errors.has('price')">{{ errors.first('price') }}</small>
-          </div>
-
-          <div class="input-group mb-3 col-md-12">
-            <label class="text-capitalize ml-3" for="description">
-              Description
-              <small
-                :class="!detail.description || errors.has('description') ? 'text-danger' : 'text-success' "
-              >*</small>
-            </label>
-            <div class="input-group">
+            <div class="input-group mb-3 col-md-12">
+              <label class="text-capitalize ml-3" for="description">
+                Description
+                <small
+                  :class="!detail.description || errors.has('description') ? 'text-danger' : 'text-success' "
+                >*</small>
+              </label>
+              <div class="input-group">
             <textarea
               :class="{ 'is-invalid': errors.has('description') }"
               class="form-control"
@@ -163,49 +150,50 @@
               v-model="detail.description"
               v-validate="'required'"
             />
+              </div>
+              <small
+                class="text-danger mt-1"
+                v-if="errors.has('description')"
+              >{{ errors.first('description') }}</small>
             </div>
-            <small
-              class="text-danger mt-1"
-              v-if="errors.has('description')"
-            >{{ errors.first('description') }}</small>
-          </div>
 
-                    <div class="input-group">
-                      <div class="input-group mb-3 col-md-12">
-                        <div class="input-group pull-left">
-                          <vue-upload-multiple-image
-                            :data-images="detail.images"
-                            @before-remove="beforeRemove"
-                            @edit-image="editImage"
-                            @upload-success="uploadImageSuccess"
-                            browseText="Select Product Images"
-                            dragText="Browse Image"
-                            popupText="Uploaded Image"
-                            primaryText="Image"
-                          />
-                        </div>
-                      </div>
-                    </div>
-          <div class="input-group mb-3">
-            <label class="text-capitalize ml-3" for="name">
-              Active
-              <!-- <small
-                            :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
-              >*</small>-->
-            </label>
-            <div class="input-group col-md-12">
-              <switches
-                color="green"
-                theme="bulma"
-                type-bold="false"
-                v-bind:label="detail.is_active === true ? 'Active' : 'Deactive'"
-                v-model="detail.is_active"
-              />
+            <div class="input-group">
+              <div class="input-group mb-3 col-md-12">
+                <div class="input-group pull-left">
+                  <vue-upload-multiple-image
+                    :data-images="detail.images"
+                    @before-remove="beforeRemove"
+                    @edit-image="editImage"
+                    @upload-success="uploadImageSuccess"
+                    browseText="Select Product Images"
+                    dragText="Browse Image"
+                    popupText="Uploaded Image"
+                    primaryText="Image"
+                  />
+                </div>
+              </div>
             </div>
-            <!-- <small
-                          v-if="errors.has('name')"
-                          class="text-danger mt-1"
-            >{{ errors.first('name') }}</small>-->
+            <div class="input-group mb-3">
+              <label class="text-capitalize ml-3" for="name">
+                Active
+                <!-- <small
+                              :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+                >*</small>-->
+              </label>
+              <div class="input-group col-md-12">
+                <switches
+                  color="green"
+                  theme="bulma"
+                  type-bold="false"
+                  v-bind:label="detail.is_active === true ? 'Active' : 'Deactive'"
+                  v-model="detail.is_active"
+                />
+              </div>
+              <!-- <small
+                            v-if="errors.has('name')"
+                            class="text-danger mt-1"
+              >{{ errors.first('name') }}</small>-->
+            </div>
           </div>
         </form>
       </div>
@@ -237,6 +225,9 @@
         category_list: [],
         subcategory_list: [],
         child_category_list: [],
+        attributes_list: [],
+
+
         main_category_id: null,
         subcategory_id: null,
         clild_category_id: null,
@@ -291,10 +282,52 @@
         } else {
           this[varName] = [];
         }
-        console.log(varName, this[varName])
+
       },
 
 
+      async getProductAttributeDetailsBuCategoryId(subcategoryId) {
+        // console.log("ID Gotted", subcategoryId);
+        // return  false;
+
+        let request = {
+          subcategory_id:  subcategoryId,
+          "is_parent": true,
+          "relation": [
+            "subcategory_details"
+          ],
+          "subcategory_details_where": {
+            "subcategory_ids": subcategoryId,
+            "is_active" : true
+          }
+        };
+        let res = await Services.call(ApiCollections.common_products_attributes_list).post(request);
+        if (res && res.success === true) {
+          let attributes_list = res.data.list;
+
+          // let allParents = _.where(attributes_list, {'parent_id' : null});
+          this.attributes_list = attributes_list
+
+
+          console.log("All Parents with clients", this.attributes_list);
+
+        } else {
+          this.attributes_list = [];
+        }
+
+      },
+      /** get attribute request list
+      /*{
+    "subcategory_id": "8",
+    "is_parent": true,
+    "relation": [
+        "subcategory_details"
+    ],
+    "subcategory_details_where": {
+        "subcategory_ids": 8,
+        "is_active" : true
+    }
+}*/
 
       toDataURL(url, callback) {
         var xhr = new XMLHttpRequest();
@@ -333,6 +366,10 @@
       "subcategory_id"(newVal) {
         this.getCategoryListById(parseInt(newVal), 'child_category_list')
       },
+      "clild_category_id"(val) {
+        this.getProductAttributeDetailsBuCategoryId(parseInt(val))
+
+      }
     }
 
   }
