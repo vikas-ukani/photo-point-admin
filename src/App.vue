@@ -2,8 +2,8 @@
   <div>
     <!-- <notifications group="foo" /> -->
     <notifications group="foo" position="top center" />
-    <router-view/>
-    <vue-progress-bar/>
+    <router-view />
+    <vue-progress-bar />
   </div>
 </template>
 
@@ -20,7 +20,7 @@ export default {
 
 
 <style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
-
+ 
 <style lang="scss">
 // CoreUI Icons Set
 @import "~@coreui/icons/css/coreui-icons.min.css";
@@ -41,7 +41,5 @@ $simple-line-font-path: "~simple-line-icons/fonts/";
 
 @import "~/pc-bootstrap4-datetimepicker/build/css/bootstrap-datetimepicker.css";
 
-@import '~vue-search-select/dist/VueSearchSelect.css';
-
-
+@import "~vue-search-select/dist/VueSearchSelect.css";
 </style>

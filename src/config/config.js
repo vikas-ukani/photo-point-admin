@@ -120,9 +120,7 @@ export const ApiCollections = {
    * Product Common Attribute APIs
    */
   common_products_attributes_list: {method: "POST", url: api_prefix + "common-products-attributes-list"},
-
-
-
+ 
 
   /** products apis */
   products_list: {method: "POST", url: api_prefix + "products-list"},
