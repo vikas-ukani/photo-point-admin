@@ -116,10 +116,10 @@
             </div>
 
             <label class="typo__label">Simple select / dropdown</label>
-            <div v-for="(details, key) in sku_childs_attributes_list " :key="key">
-              <pre>{{details}}</pre>
+            <div v-for="(detail, key) in sku_childs_attributes_list " :key="key">
+              <pre>{{detail}}</pre>
 
-              <label class="typo__label">{{key}}</label>
+              <label class="typo__label">{{kdetail.name}}</label>
               <multiselect
                 v-model="items"
                 tag-placeholder="Add this as new tag"
@@ -445,15 +445,15 @@ export default {
           list.parent_items = [];
           // allChilds["sku_" + list.name.toLowerCase()] = [];
 
-          allChilds.push({
+          let data_object = {
             name: list.name,
             details: []
-          });
+          };
+          allChilds.push(data_object);
+          // allChilds[index][data_object] = [];
+          allChilds[index].details[list.name + "_sku_options"] = [];
 
-          allChilds[list.name] = [];
-          allChilds[list.name][list.name + "_sku_options"] = [];
-
-          allParents.push({ value: list.id, text: list.name });
+          // allParents.push({ value: list.id, text: list.name });
 
           if (list.subcategory_details && list.subcategory_details.length)
             _.each(list.subcategory_details, (list1, index) => {
@@ -469,7 +469,7 @@ export default {
         });
 
         // console.log("Parent ", /* allParents, */ allChilds);
-        this.sku_parnet_attributes_list = allParents;
+        // this.sku_parnet_attributes_list = allParents;
         this.sku_childs_attributes_list = allChilds;
         console.log(
           "sku_childs_attributes_list",
