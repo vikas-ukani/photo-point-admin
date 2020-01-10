@@ -13,7 +13,9 @@
       ></PageHeader>
       <!-- :add_route="$route.path + '-add'" -->
       <div class="card card-body" v-if="lists && lists.length">
-        <table class="table table-hover table-responsive-sm col-lg-12 col-md-12 col-sm-12 col-xs-12">
+        <table
+          class="table table-hover table-responsive-sm col-lg-12 col-md-12 col-sm-12 col-xs-12"
+        > 
           <thead>
             <tr>
               <th nowrap>
@@ -42,10 +44,10 @@
               </td>
               <!-- <td>
                 <small class="font-bold">{{ (list.code )|| '-' }}</small>
-              </td> -->
+              </td>-->
               <!-- <td>
                 <small class="font-bold">{{ (list.country_code )|| '-' }}</small>
-              </td> -->
+              </td>-->
 
               <td>
                 <span class="p-0 m-0" @click="statusChange('is_active', !list.is_active, list.id)">

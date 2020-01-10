@@ -26,14 +26,12 @@
               </label>
               {{main_category_id}}
               <!-- object value -->
-              <!-- <model-select
+              <model-select
                 :options="category_list"
-                @change="getCategoryListById(main_category_id, 'subcategory_list')"
                 placeholder="Select Main category"
                 v-model="main_category_id"
-              >-->
-              <!--              @click="getCategoryListById(main_category_id, 'subcategory_list')"-->
-              <!-- </model-select> -->
+                @change="getCategoryListById(main_category_id, 'subcategory_list')"
+              />
             </div>
 
             <div class="mb-3 col-md-4">
@@ -44,12 +42,11 @@
                     :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
                   >*</small>
                 </label>
-                <!-- object value -->
-                <!-- <model-select
+                <model-select
                   :options="subcategory_list"
                   placeholder="Select Sub category"
                   v-model="subcategory_id"
-                ></model-select>-->
+                ></model-select>
               </div>
             </div>
 
@@ -61,13 +58,11 @@
                     :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
                   >*</small>
                 </label>
-                <!--  {{main_category_id}}-->
-                <!-- object value -->
-                <!-- <model-select
+                <model-select
                   :options="child_category_list"
                   placeholder="Select clild category"
                   v-model="clild_category_id"
-                ></model-select>-->
+                ></model-select>
               </div>
             </div>
           </div>
@@ -104,87 +99,59 @@
                 </div>
               </div>
             </div>
-            <!-- <component  v-bind:is="multiselect"
-                    :value='[
-               {"id": "apple", "title": "Яблоко"},
-               {"id": "banana", "title": "Banana"},
-               {"id": "man", "title": "Jon"}
-            ]'   ></component>-->
 
             <div class="mt-3 mb-3 col-md-12 font-dark">
-              <h5>Step 3: Product attributes.</h5>
-            </div>
+              <h5 class="mb-3">Step 3: Product attributes.</h5>
 
-            <label class="typo__label">Simple select / dropdown</label>
-            <div v-for="(detail, key) in sku_childs_attributes_list " :key="key">
-              <pre>{{detail}}</pre>
-
-              <label class="typo__label">{{kdetail.name}}</label>
-              <multiselect
-                v-model="items"
-                tag-placeholder="Add this as new tag"
-                placeholder="Search or add a tag"
-                label="name"
-                track-by="code"
-                :options="[
-                      { name: 'Vue.js', code: 'vu' },
-                      { name: 'Javascript', code: 'js' },
-                      { name: 'Open Source', code: 'os' }
-                    ]"
-                :multiple="true"
-                :taggable="true"
-                @tag="addTag('ke')"
-              ></multiselect>
-            </div>
-            <pre class="language-json"><code>{{ items  }}</code></pre>
-
-            <div class="input-group mb-3 col-md-12 border border-secondary p-4">
               <div
-                class="input-group col-md-5 border border-info m-3 p-3"
-                v-for="(parent, key) in sku_childs_attributes_list"
-                :key="key"
+                class="input-group mb-3 col-md-6"
+                v-if="size_attributes && size_attributes.length"
               >
-                <!-- sku_childs_attributes_list -->
-                <label class="text-capitalize" for="price">{{key}} attributes</label>
-                <div class="input-group mt-3">
-                  <input class="form-control" name="price" readonly type="text" value="key" />
-                  <!--   v-model="key" -->
-                  <!--                     v-model="sku_parnet_attributes_list_id"-->
-                  <!--              @click="getCategoryListById(main_category_id, 'subcategory_list')"-->
-                  <!--                  </model-select>-->
-                </div>
+                <label class="text-capitalize ml-3" for="size">Size</label>
+                <multiselect
+                  id="size"
+                  v-model="size_selected"
+                  tag-placeholder="Add this as new tag"
+                  placeholder="Search or add a tag"
+                  label="name"
+                  track-by="code"
+                  :options="size_attributes"
+                  :multiple="true"
+                  :taggable="true"
+                  @tag="addSizeTag('ke')"
+                ></multiselect>
+              </div>
 
-                <div class="input-group mt-3">
-                  <!-- :options="getAttributeOptionsForSelection(parent.subcategory_details)" -->
-
-                  <!-- <component
-                    v-bind:is="multiselect"
-                    :value="[
-               {"id": "apple", "title": "Яблоко"},
-               {"id": "banana", "title": "Banana"},
-               {"id": "man", "title": "Jon"}
-                  ]"   ></component>-->
-
-                  <!-- <multi-select
-                    :options="parent[key]['sku_' + key +'_options']"
-                    :placeholder="'Select ' + key"
-                    :selected-options="parent[key]['sku_' + key +'_items']"
-                    @select="onSelect"
-                  />-->
-                  <!--                                                  :selected-options="parent.parent_items"-->
-                  <pre>{{sku_details}}</pre>
-
-                  <!--              @click="getCategoryListById(main_category_id, 'subcategory_list')"-->
-                </div>
-
-                <small
-                  class="text-danger mt-1"
-                  v-if="errors.has('price')"
-                >{{ errors.first('price') }}</small>
+              <div
+                class="input-group mb-3 col-md-6"
+                v-if="color_attributes && color_attributes.length"
+              >
+                <label class="text-capitalize ml-3" for="size">color</label>
+                <multiselect
+                  id="color"
+                  v-model="color_selected"
+                  tag-placeholder="Add this as new tag"
+                  placeholder="Search or add a tag"
+                  label="name"
+                  track-by="code"
+                  :options="color_attributes"
+                  :multiple="true"
+                  :taggable="true"
+                  @tag="addColorTag('ke')"
+                ></multiselect>
               </div>
             </div>
 
-            <div class="input-group mb-3 col-md-6">
+            <div class="input-group mb-3 col-md-12">
+              <label class="text-capitalize ml-3" for="price">
+                <b>description</b>
+              </label>
+              <div class="input-group">
+                <vue-editor id="editor" v-model="detail.description"></vue-editor>
+              </div>
+            </div>
+
+            <div class="input-group mt-5 mb-3 col-md-6">
               <label class="text-capitalize ml-3" for="price">
                 price
                 <small
@@ -207,7 +174,7 @@
               <small class="text-danger mt-1" v-if="errors.has('price')">{{ errors.first('price') }}</small>
             </div>
 
-            <div class="input-group mb-3 col-md-12">
+            <!-- <div class="input-group mb-3 col-md-12">
               <label class="text-capitalize ml-3" for="description">
                 Description
                 <small
@@ -232,7 +199,7 @@
                 class="text-danger mt-1"
                 v-if="errors.has('description')"
               >{{ errors.first('description') }}</small>
-            </div>
+            </div>-->
 
             <div class="input-group">
               <div class="input-group mb-3 col-md-12">
@@ -282,12 +249,14 @@
 import PageHeader from "../../../../components/custom/PageHeader";
 import Services from "../../../../Services/apiServices";
 import { ApiCollections, baseURL } from "../../../../config/config";
-import _ from "lodash";
-// import { ModelSelect, MultiSelect } from "vue-search-select";
+// import _ from "vue-underscore";
+import { ModelSelect } from "vue-search-select";
 import Multiselect from "vue-multiselect";
 
 import Switches from "vue-switches";
 import VueUploadMultipleImage from "vue-upload-multiple-image";
+import { Constants } from "../../../../constants/index";
+import { VueEditor } from "vue2-editor";
 
 export default {
   name: "AddProduct",
@@ -295,12 +264,19 @@ export default {
     PageHeader,
     Switches,
     VueUploadMultipleImage,
-    Multiselect
-    // ModelSelect
+    Multiselect,
+    ModelSelect,
+    VueEditor
   },
 
   data() {
     return {
+      size_attributes: [],
+      size_selected: [],
+
+      color_attributes: [],
+      color_selected: [],
+
       category_list: [],
       subcategory_list: [],
       child_category_list: [],
@@ -322,7 +298,7 @@ export default {
         name: "",
         category_id: "",
         price: "",
-        description: "",
+        description: "<h4>Some initial content</h4>",
         is_active: true,
         images: [],
         product_attributes: []
@@ -345,25 +321,7 @@ export default {
         return options;
       }
     },
-    // addTag (newTag, key ) {
 
-    //   const tag = {
-    //     name: newTag,
-    //     code: newTag.substring(0, 2) + Math.floor((Math.random() * 10000000))
-    //   }
-    //   console.log("New Ta key",key,  tag);
-
-    //   this.options.push(tag)
-    //   this.value.push(tag)
-    // },
-
-    // onSelect(items, lastSelectItem, key, event) {
-    //   this.items = items;
-    //   this.parent_items = items;
-    //   this.lastSelectItem = lastSelectItem;
-    //   console.log("Parnet is d", event, key, this.parent_items);
-    //   console.log("Select Change", items, lastSelectItem);
-    // },
     setTagValues(key) {
       console.log("Key ", key);
       // this.items = items;
@@ -416,6 +374,9 @@ export default {
       }
     },
 
+    /**
+     * Get Attributes
+     */
     async getProductAttributeDetailsBuCategoryId(subcategoryId) {
       console.log("ID Gotted", subcategoryId);
       // return  false;
@@ -438,24 +399,57 @@ export default {
         let attributes_list = res.data.list;
         this.attributes_list = res.data.list;
 
+        // let size_attributes = _.findWhere(attributes_list, {
+        //   code: Constants.SIZE_NAME
+        // });
+
+        // console.log("size_attributes", size_attributes, attributes_list);
+        // return false;
+
         // let allParents = this.$_.where(attributes_list, {'parent_id' : null});
         let allParents = [];
         let allChilds = [];
-        _.each(attributes_list, (list, index) => {
-          list.parent_items = [];
-          // allChilds["sku_" + list.name.toLowerCase()] = [];
 
-          let data_object = {
-            name: list.name,
-            details: []
-          };
-          allChilds.push(data_object);
+        let sizes = [];
+
+        _.each(attributes_list, (list, index) => {
+          /** get size array */
+          if (list.code === Constants.SIZE_NAME) {
+            let allSize = [];
+            _.each(list.subcategory_details, (subList, index) => {
+              allSize.push({
+                id: subList.id,
+                name: subList.name,
+                code: subList.id
+              });
+            });
+            this.size_attributes = allSize;
+          }
+          if (list.code === Constants.COLOR_NAME) {
+            let allData = [];
+            _.each(list.subcategory_details, (subList, index) => {
+              allData.push({
+                id: subList.id,
+                name: subList.name,
+                code: subList.id
+              });
+            });
+            this.color_attributes = allData;
+          }
+
+          // list.parent_items = [];
+
+          // let data_object = {
+          //   name: list.name,
+          //   details: []
+          // };
+          // allChilds.push(data_object);
           // allChilds[index][data_object] = [];
-          allChilds[index].details[list.name + "_sku_options"] = [];
+          // allChilds[index].details[list.name + "_sku_options"] = [];
 
           // allParents.push({ value: list.id, text: list.name });
 
-          if (list.subcategory_details && list.subcategory_details.length)
+          /* if (list.subcategory_details && list.subcategory_details.length)
             _.each(list.subcategory_details, (list1, index) => {
               list1.child_items = [];
               // console.log("In child", allChilds);
@@ -465,17 +459,17 @@ export default {
                 text: list1.name
               });
               allChilds[list.name][list.name + "_sku_items"] = [];
-            });
+            }); */
         });
 
         // console.log("Parent ", /* allParents, */ allChilds);
         // this.sku_parnet_attributes_list = allParents;
-        this.sku_childs_attributes_list = allChilds;
-        console.log(
-          "sku_childs_attributes_list",
-          // this.sku_parnet_attributes_list,
-          this.sku_childs_attributes_list
-        );
+        // this.sku_childs_attributes_list = allChilds;
+        // console.log(
+        //   "size_attributes",
+        //   // this.sku_parnet_attributes_list,
+        //   this.size_attributes
+        // );
 
         // console.log("All Parents with clients", this.attributes_list);
       } else {
