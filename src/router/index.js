@@ -1,12 +1,7 @@
 import Vue from "vue";
 import Router from "vue-router";
-Vue.use(Router);
-
 // const store = () => import('@store/index')
 import store from "../store"; // your vuex store
-
-// const Login = () => import('@/views/pages/Login')
-
 // import Login from '../views/admin/auth/LoginComponent'
 import ForgotPassword from "../views/admin/auth/ForgotPasswordComponent";
 import ChangePassword from "../views/admin/auth/ChangePasswordComponent";
@@ -16,11 +11,8 @@ import Users from "../views/Users/Index";
 import EditUsers from "../views/Users/Edit";
 
 import Shopper from "../views/Shopper/";
-// import EditUsers from "../views/Users/Edit";
-
 // Views
 import Profile from "../views/admin/auth/Profile";
-
 /** Masters Components */
 import Countries from "../views/admin/Masters/Countries";
 import ComplaintCategories from "../views/admin/Masters/ComplaintCategories";
@@ -29,6 +21,11 @@ import FeatureProducts from "../views/admin/Masters/FeatureProducts";
 import Offers from "../views/admin/Masters/Offers";
 import Category from "../views/admin/Masters/Category";
 import AddProduct from "../views/admin/Masters/Products/AddProduct";
+
+Vue.use(Router);
+
+// const Login = () => import('@/views/pages/Login')
+// import EditUsers from "../views/Users/Edit";
 // import TrainingActivities from "../views/admin/Masters/TrainingActivities";
 
 // Containers
@@ -109,7 +106,6 @@ export default new Router({
           component: Countries,
           beforeEnter: ifAuthenticated
         },
-
         {
           path: "/complaint-categories", // route_prefix +
           name: "Complaint Categories",

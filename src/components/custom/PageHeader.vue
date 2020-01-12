@@ -40,9 +40,11 @@
           <i class="fa fa-plus"/>
           Add
         </button>
-        <router-link :to="back_route"
-                     class="btn btn-primary rounded btn-sm text-black-50 text-dark"
-                     v-if="back_route">
+        <router-link
+          :to="back_route"
+          class="btn btn-primary rounded btn-sm text-white"
+          v-if="back_route"
+        >
           <i class="fa fa-reply mr-1"/>
           <span>Back</span>
         </router-link>
@@ -104,7 +106,6 @@
         default: () => ""
       },
       titleCounter: {
-        required: true,
         required: false,
         default: () => ""
       },
