@@ -2,9 +2,9 @@
 <template>
   <div>
       <pre>
-        {{stockDetails}}
+        {{stock_details}}
       </pre>
-    <table class="table table-hover" v-if="stockDetails.length ">
+    <table class="table table-hover" v-if="stock_details.length ">
       <thead>
       <tr>
         <th>#</th>
@@ -18,7 +18,7 @@
       </thead>
 
       <tbody>
-      <tr :key="index" v-for="(stockList, index) in stockDetails">
+      <tr :key="index" v-for="(stockList, index) in stock_details">
         <td>{{index + 1}}</td>
         <td>
           <input
@@ -108,7 +108,7 @@
 <script>
   export default {
     name: "ProductStockDetailsTable",
-    props: ['stockDetails'],
+    props: ['stock_details'],
 
 
   }

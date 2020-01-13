@@ -25,7 +25,7 @@
             </div>
 
             <div class="mb-3 col-md-4">
-              <pre>{{main_category_id}}</pre>
+<!--              <pre>{{main_category_id}}</pre>-->
               <label class="text-capitalize">
                 Main Category
                 <small
@@ -49,7 +49,7 @@
 
             <div class="mb-3 col-md-4">
               <div v-if="subcategory_list && subcategory_list.length">
-                <pre>{{subcategory_id}}</pre>
+<!--                <pre>{{subcategory_id}}</pre>-->
                 <label class="text-capitalize">
                   Subcategory
                   <small
@@ -65,8 +65,8 @@
             </div>
 
             <div class="mb-3 col-md-4">
-              <div v-if="child_category_list && child_category_list.length">
-                <pre>{{child_category_id}}</pre>
+              <div v-if="subcategory_id && child_category_list.length">
+<!--                <pre>{{child_category_id}}</pre>-->
                 <label class="text-capitalize">
                   child category
                   <small
@@ -184,10 +184,10 @@
             </div>
             <div
               class="pb-2 border-dark mb-4 col-12"
-              v-if="detail.stockDetails.length "
+              v-if="detail.stock_details.length "
             >
               <!--              v-if="!(size_selected.length === 0 || color_selected.length === 0)"-->
-              <ProductStockDetailsTable :stock-details="detail.stockDetails"/>
+              <ProductStockDetailsTable :stock_details="detail.stock_details"/>
             </div>
           </div>
 

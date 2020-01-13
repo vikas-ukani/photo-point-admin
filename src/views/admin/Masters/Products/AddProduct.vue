@@ -28,7 +28,7 @@
 
     data() {
       return {
-        stockDetails: [],
+        stock_details: [],
         size_attributes: [],
         size_selected: [],
 
@@ -56,7 +56,7 @@
           is_active: true,
           images: [],
           // product_attributes: [],
-          stockDetails: []
+          stock_details: []
         }
       };
     },
@@ -75,8 +75,8 @@
         else if (this.subcategory_id) this.detail.category_id = this.subcategory_id;
         else if (this.main_category_id) this.detail.category_id = this.main_category_id;
 
-        console.log("Check all validation", this.detail);
-        return false;
+        // console.log("Check all validation", this.detail);
+        // return false;
 
         let index;
         let formData = new FormData();
@@ -105,13 +105,13 @@
           }
         }
 
-        formData.append("name", this.detail.name);
-        formData.append("category_id", this.detail.category_id);
-        formData.append("price", this.detail.price);
-        formData.append("size", this.detail.size);
-        formData.append("color", this.detail.color);
-        formData.append("description", this.detail.description);
-        formData.append("is_active", this.detail.is_active);
+        // formData.append("name", this.detail.name);
+        // formData.append("category_id", this.detail.category_id);
+        // formData.append("price", this.detail.price);
+        // formData.append("size", this.detail.size);
+        // formData.append("color", this.detail.color);
+        // formData.append("description", this.detail.description);
+        // formData.append("is_active", this.detail.is_active);
 
         this.$Progress.start();
         if (this.detail && this.detail.id) {
@@ -147,17 +147,22 @@
         } else {
           /** create data */
           let res = await Services.call(ApiCollections.products_create).post(
-            formData
+            // formData
+            this.detail
           );
           /** set data  */
           if (res && res.success && res.success === true) {
-            this.lists.unshift(res.data);
-            this.totalCount++;
+            console.log("Create Success", res.data);
+            // this.lists.unshift(res.data);
+            // this.totalCount++;
             this.$Progress.finish();
             Services.notify("s", res.message);
-            this.showModal = false;
+            // this.showModal = false;
             this.detail = {};
+
+            /** redirect to home page */
           } else {
+            console.log("Create Error", res.data);
             this.$Progress.fail();
             Services.notify("e", res.message);
           }
@@ -332,10 +337,10 @@
             });
           });
         });
-        this.detail.stockDetails = stockDetail;
+        this.detail.stock_details = stockDetail;
       },
       removeItemFromStockDetails(index) {
-        this.detail.stockDetails.splice(index, 1);
+        this.detail.stock_details.splice(index, 1);
       }
     },
     watch: {

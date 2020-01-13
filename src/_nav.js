@@ -27,7 +27,7 @@ export default {
     {
       name: "Category",
       url: "/category",
-      icon: "icon-category",
+      icon: "database",
       sequence: 5
     },
     {
