@@ -63,6 +63,12 @@ export const ApiCollections = {
     url: api_prefix + "upload",
     headers: {headers: {"Content-Type": "multipart/form-data"}}
   },
+
+  singleImageUpload: {
+    method: "post",
+    url: baseURL + "/single-image-upload",
+    headers: {headers: {"Content-Type": "multipart/form-data"}}
+  },
   users_status_change: {method: "delete", url: api_prefix + "users-status-change"},
   get_users_count_by_type: {method: "get", url: api_prefix + "get-user-count-by-type"},
   /** Masters Countries countries */
@@ -120,7 +126,7 @@ export const ApiCollections = {
    * Product Common Attribute APIs
    */
   common_products_attributes_list: {method: "POST", url: api_prefix + "common-products-attributes-list"},
- 
+
 
   /** products apis */
   products_list: {method: "POST", url: api_prefix + "products-list"},
