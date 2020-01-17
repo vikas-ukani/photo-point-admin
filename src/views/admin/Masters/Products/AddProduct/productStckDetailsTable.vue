@@ -40,56 +40,19 @@
 
         <td>
 
-
-          <!--<ImageUploadComponent   folder_name="products"/>-->
-
           <input @change="handleFileChange(index)" type="file"/>
 
           <img :key="imageIndex"
                class="img-avatar"
                height="80"
-               v-bind:alt="image"
-               v-bind:src="image"
+               v-bind:alt="getFullImage(image)"
+               v-bind:src="getFullImage(image)"
                v-for="(image, imageIndex) in stockList.images"
                width="80"
           />
 
-          <!--          <file-select folder_name="products" v-model="file"></file-select>-->
-          <!--          <pre>{{filepath}}</pre>-->
-          <!--          <pre v-if="file">{{file}}</pre>-->
-
-          <!--          <img :key="index"-->
-          <!--               class="img-avatar"-->
-          <!--               height="80"-->
-          <!--               v-bind:alt="image"-->
-          <!--               v-bind:src="image"-->
-          <!--               v-for="(image, imageIndex) in stockList.images"-->
-          <!--               width="80"-->
-          <!--          />-->
-          <!--          <input type="file" @change="handleFileChange"/>-->
-
-          <!--          <input @change="onFileChanged(index, 'products' )" class="btn btn-info " type="file" />-->
-
-          <!--          <button class="btn btn-outline-blue border-dashed w-64-px font-sm" type="button">-->
-          <!--            <i class="iconfont icon-plus-circle mr-1"></i>-->
-          <!--            <span >Add</span>-->
-          <!--          </button>-->
-
-          <!--                      :data-images="stockList.images"
-                      @before-remove="beforeRemove"
-                      @edit-image="editImage"
-                      @upload-success="uploadImageSuccess"-->
-          <!--                    <vue-upload-multiple-image-->
-          <!--                      size="1"-->
-          <!--                      browseText="Select Product Images"-->
-          <!--                      dragText="Browse Image"-->
-          <!--                      popupText="Uploaded Image"-->
-          <!--                      primaryText="Image"-->
-          <!--                      @upload-success="onFileChanged(this, index, 'products' )"-->
-          <!--                    />-->
         </td>
         <td>
-          <!--          <pre>{{errors.has(`stock_sale_price_${index}`)}}</pre>-->
           <input
             :name="'sale_price' + index "
             class="form-control"
@@ -155,16 +118,15 @@
 
 <script>
   import VueUploadMultipleImage from "vue-upload-multiple-image";
-  import FileSelect from '../../../../../components/custom/FileSelect'
-  import {ApiCollections} from "../../../../../config/config";
+   import {ApiCollections, baseURL} from "../../../../../config/config";
+  import Services from "../../../../../Services/apiServices";
   // import ImageUploadComponent from '../../../../../components/custom/ImageuploadComponent'
 
   export default {
     name: "ProductStockDetailsTable",
     components: {
       VueUploadMultipleImage,
-      FileSelect,
-      // ImageUploadComponent
+       // ImageUploadComponent
     },
 
     props: ['stock_details'],
@@ -180,7 +142,7 @@
       //   const file = event.target.files[0];
       //   this.selectedFile = event.target.files[0];
       // },
-      handleFileChange(index) {
+      async handleFileChange(index) {
         // Whenever the file changes, emit the 'input' event with the file data.
 
         let formData = new FormData();
@@ -190,19 +152,21 @@
         /**
          * Call API service to upload image
          */
-        axios.post(
-          ApiCollections.singleImageUpload.url,
+        let res = await Services.call(ApiCollections.singleImageUpload).post(
+          // formData
           formData
-        ).then(response => {
-          if (response.data.success) {
-            if (typeof this.stock_details[index].images == 'array') {
-              this.stock_details[index].images.push(response.data.data);
-            } else {
-              this.stock_details[index].images = [response.data.data];
-            }
-            console.log("Check data", this.stock_details[index].images);
+        );
+        /** set data  */
+        if (res && res.success && res.success === true) {
+          if (this.stock_details[index].images && this.stock_details[index].images.length) {
+            this.stock_details[index].images.push(res.data);
+          } else {
+            this.stock_details[index].images = [res.data];
           }
-        });
+        }
+      },
+      getFullImage(filePath) {
+        return baseURL + filePath;
       }
     },
   }

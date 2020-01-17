@@ -1,5 +1,4 @@
-<!-- <template lang="" src="./AddProduct/addProduct.html" ></template> -->
-<template src="./AddProduct/addProduct.vue"/>
+<template src="./AddProduct/addProductHTML.vue"/>
 
 <script>
   /** Components Injection */
@@ -51,10 +50,8 @@
         detail: {
           name: "",
           category_id: "",
-          price: "",
           description: null,
           is_active: true,
-          images: [],
           // product_attributes: [],
           stock_details: []
         }
@@ -62,7 +59,7 @@
     },
     mounted() {
       this.getCategoryList(); // categories_list
-      this.getProductAttributeDetailsBuCategoryId(8); // categories_list
+      this.getProductAttributeDetailsBuCategoryId(this.child_category_id ? this.child_category_id : this.subcategory_id); // categories_list
     },
     methods: {
 
@@ -75,43 +72,35 @@
         else if (this.subcategory_id) this.detail.category_id = this.subcategory_id;
         else if (this.main_category_id) this.detail.category_id = this.main_category_id;
 
-        // console.log("Check all validation", this.detail);
-        // return false;
 
-        let index;
-        let formData = new FormData();
+        // let index;
+        // let formData = new FormData();
+        // if (this.detail.images && this.detail.images.length) {
+        //   /** start  */
+        //   for (let i = 0; i < this.detail.images.length; i++) {
+        //     let file = this.detail.images[i];
+        //     index = file.path.search("data:image");
+        //     if (index >= 0) {
+        //       let arr = file.path.split(",");
+        //       console.log("Arr 1", i, arr);
+        //
+        //       let mime = arr[0].match(/:(.*?);/)[1];
+        //       let bstr = atob(arr[1]);
+        //       let n = bstr.length;
+        //       let u8arr = new Uint8Array(n);
+        //       while (n--) {
+        //         u8arr[n] = bstr.charCodeAt(n);
+        //       }
+        //       formData.append(
+        //         "images[]",
+        //         new File([u8arr], file.name, {type: mime})
+        //       );
+        //     }
+        //   }
+        // }
 
-        if (this.detail.images && this.detail.images.length) {
-          /** start  */
-          for (let i = 0; i < this.detail.images.length; i++) {
-            let file = this.detail.images[i];
-            index = file.path.search("data:image");
-            if (index >= 0) {
-              let arr = file.path.split(",");
-              console.log("Arr 1", i, arr);
 
-              let mime = arr[0].match(/:(.*?);/)[1];
-              let bstr = atob(arr[1]);
-              let n = bstr.length;
-              let u8arr = new Uint8Array(n);
-              while (n--) {
-                u8arr[n] = bstr.charCodeAt(n);
-              }
-              formData.append(
-                "images[]",
-                new File([u8arr], file.name, {type: mime})
-              );
-            }
-          }
-        }
-
-        // formData.append("name", this.detail.name);
-        // formData.append("category_id", this.detail.category_id);
-        // formData.append("price", this.detail.price);
-        // formData.append("size", this.detail.size);
-        // formData.append("color", this.detail.color);
-        // formData.append("description", this.detail.description);
-        // formData.append("is_active", this.detail.is_active);
+        console.log("Final Detail this.detail", this.detail);
 
         this.$Progress.start();
         if (this.detail && this.detail.id) {
@@ -147,7 +136,6 @@
         } else {
           /** create data */
           let res = await Services.call(ApiCollections.products_create).post(
-            // formData
             this.detail
           );
           /** set data  */
@@ -157,8 +145,16 @@
             // this.totalCount++;
             this.$Progress.finish();
             Services.notify("s", res.message);
-            // this.showModal = false;
-            this.detail = {};
+
+            /** clear data */
+            this.detail = {
+              name: null,
+              category_id: null,
+              description: null,
+              is_active: true,
+              // product_attributes: [],
+              stock_details: []
+            };
 
             /** redirect to home page */
           } else {
@@ -238,8 +234,6 @@
        * Get Attributes
        */
       async getProductAttributeDetailsBuCategoryId(subcategoryId) {
-        console.log("ID Gotted", subcategoryId);
-        // return  false;
 
         let request = {
           subcategory_id: subcategoryId,
@@ -333,7 +327,8 @@
               common_product_attribute_size_id: size.id,
               common_product_attribute_size_name: size.name,
               common_product_attribute_color_id: color.id,
-              common_product_attribute_color_name: color.name
+              common_product_attribute_color_name: color.name,
+              images: []
             });
           });
         });
@@ -355,7 +350,7 @@
         this.child_category_id = undefined;
         this.getCategoryListById(parseInt(newVal), "child_category_list");
 
-        if (!this.subcategory_list || this.subcategory_list.length ){
+        if (!this.subcategory_list || this.subcategory_list.length) {
           this.getProductAttributeDetailsBuCategoryId(parseInt(newVal));
         }
       },
