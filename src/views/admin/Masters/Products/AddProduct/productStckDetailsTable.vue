@@ -1,8 +1,9 @@
 <!--suppress ALL -->
 <template>
   <div>
-    <!--      <pre>{{stock_details}}</pre>-->
-    <table class="table table-hover" v-if="stock_details.length ">
+
+    <!--    v-if="stock_details.length "-->
+    <table class="table table-hover">
       <thead>
       <tr>
         <th>#</th>
@@ -17,7 +18,7 @@
       </thead>
 
       <tbody>
-      <tr :key="index" v-for="(stockList, index) in stock_details">
+      <tr :key="index" v-for="(stockList, index) in stock_details "> <!--stock_details-->
         <td>{{index + 1}}</td>
         <td>
           <input
@@ -38,18 +39,22 @@
           />
         </td>
 
-        <td>
+        <td width="50%">
 
           <input @change="handleFileChange(index)" type="file"/>
+          <br>
+          <div class="col-sm-12">
+            <img :key="imageIndex"
+                 class="img-thumbnail col-sm-2"
+                 style="min-height: 120px; min-width: 120px;
+max-height: 120px; max-width: 120px"
 
-          <img :key="imageIndex"
-               class="img-avatar"
-               height="80"
-               v-bind:alt="getFullImage(image)"
-               v-bind:src="getFullImage(image)"
-               v-for="(image, imageIndex) in stockList.images"
-               width="80"
-          />
+                 v-bind:alt="getFullImage(image)"
+                 v-bind:src="getFullImage(image)"
+                 v-for="(image, imageIndex) in stockList.images"
+
+            />
+          </div>
 
         </td>
         <td>
@@ -118,7 +123,7 @@
 
 <script>
   import VueUploadMultipleImage from "vue-upload-multiple-image";
-   import {ApiCollections, baseURL} from "../../../../../config/config";
+  import {ApiCollections, baseURL} from "../../../../../config/config";
   import Services from "../../../../../Services/apiServices";
   // import ImageUploadComponent from '../../../../../components/custom/ImageuploadComponent'
 
@@ -126,7 +131,7 @@
     name: "ProductStockDetailsTable",
     components: {
       VueUploadMultipleImage,
-       // ImageUploadComponent
+      // ImageUploadComponent
     },
 
     props: ['stock_details'],
@@ -144,7 +149,6 @@
       // },
       async handleFileChange(index) {
         // Whenever the file changes, emit the 'input' event with the file data.
-
         let formData = new FormData();
         formData.append("folder_name", "products");
         formData.append("image", event.target.files[0]);

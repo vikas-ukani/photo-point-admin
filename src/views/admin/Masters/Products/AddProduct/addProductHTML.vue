@@ -170,17 +170,18 @@
             </div>
           </div>
 
-          <div class="input-group col-12 mt-3 border-top pt-3" v-if="child_category_id">
+<!--          v-if="child_category_id"-->
+          <div class="input-group col-12 mt-3 border-top pt-3" >
             <div class="mb-3 col-md-12 font-dark pl-0">
               <h5 class="font-weight-bolder">Step 4: Product Stock Details</h5>
               <span class="text-danger ml-2 mb-0 font-weight-bold font-italic">Select product attributes first,</span>
             </div>
             <div
               class="pb-2 border-dark mb-4 col-12"
-              v-if="detail.stock_details.length "
+
             >
-              <!--              v-if="!(size_selected.length === 0 || color_selected.length === 0)"-->
-              <ProductStockDetailsTable :stock_details="detail.stock_details"/>
+<!--              v-if="detail.stock_details.length "-->
+               <ProductStockDetailsTable :stock_details="detail.stock_details"/>
             </div>
           </div>
 

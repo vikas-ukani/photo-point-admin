@@ -5,20 +5,19 @@ import 'core-js/es6/string'
 import 'core-js/es7/array'
 // import cssVars from 'css-vars-ponyfill'
 import Vue from 'vue'
-
 // require("./Services/filters-directives")
 // import "./Services/filters-directives";
 
 import VueResource from 'vue-resource'
-Vue.use(VueResource)
+Vue.use(VueResource);
 
-require('./package-injection')
-require('dotenv').config()
+require('./package-injection');
+require('dotenv').config();
 //// To Remove CORS ERROR
-Vue.http.headers.common['Access-Control-Allow-Origin'] = '*'
-Vue.http.headers.common['Content-Type'] = 'application/x-www-form-urlencoded'
-Vue.http.headers.common['Accept'] = 'application/json, text/plain, */*'
-Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin'
+Vue.http.headers.common['Access-Control-Allow-Origin'] = '*';
+Vue.http.headers.common['Content-Type'] = 'application/x-www-form-urlencoded';
+Vue.http.headers.common['Accept'] = 'application/json, text/plain, */*';
+Vue.http.headers.common['Access-Control-Allow-Headers'] = 'Origin, Accept, Content-Type, Authorization, Access-Control-Allow-Origin';
 
 import BootstrapVue from 'bootstrap-vue'
 import VueProgressBar from 'vue-progressbar'
@@ -34,17 +33,17 @@ const options = {
   autoRevert: true,
   location: 'left',
   inverse: false
-}
+};
 
-Vue.use(VueProgressBar, options)
+Vue.use(VueProgressBar, options);
 import App from './App'
 
 import router from './router'
 require('./bootstrap');
 
-window.Vue = require('vue');
+window.Vue = Vue;
 
-Vue.config.productionTip = false
+Vue.config.productionTip = false;
 
 import VueSweetalert2 from 'vue-sweetalert2';
 import 'sweetalert2/dist/sweetalert2.min.css';
@@ -61,7 +60,7 @@ Vue.use(VeeValidate);
 // todo
 // cssVars()
 
-Vue.use(BootstrapVue)
+Vue.use(BootstrapVue);
 
 import "./Services/filters-directives";
 require("./Services/filters-directives");
@@ -85,6 +84,8 @@ new Vue({
   el: '#app',
   store,
   router,
+  // vuetify,
+
   services,
   template: '<App/>',
   components: {
@@ -95,4 +96,4 @@ new Vue({
       user: "Test"
     }
   },
-})
+});

@@ -21,6 +21,7 @@ import FeatureProducts from "../views/admin/Masters/FeatureProducts";
 import Offers from "../views/admin/Masters/Offers";
 import Category from "../views/admin/Masters/Category";
 import AddProduct from "../views/admin/Masters/Products/AddProduct";
+import EditProduct from "../views/admin/Masters/Products/EditProduct";
 
 Vue.use(Router);
 
@@ -123,6 +124,12 @@ export default new Router({
           path: "/add-product", // route_prefix +
           name: "AddProducts",
           component: AddProduct,
+          beforeEnter: ifAuthenticated
+        },
+        {
+          path: "/edit-product/:id", // route_prefix +
+          name: "EditProducts",
+          component: EditProduct,
           beforeEnter: ifAuthenticated
         },
         {

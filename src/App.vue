@@ -11,16 +11,14 @@
 <!--<link rel="stylesheet" href="https://unpkg.com/vue-multiselect@2.1.0/dist/vue-multiselect.min.css">-->
 
 
-
 <script>
 export default {
   name: "App"
 };
 </script>
 
+<style src="vue-multiselect/dist/vue-multiselect.min.css"/>
 
-<style src="vue-multiselect/dist/vue-multiselect.min.css"></style>
- 
 <style lang="scss">
 // CoreUI Icons Set
 @import "~@coreui/icons/css/coreui-icons.min.css";
