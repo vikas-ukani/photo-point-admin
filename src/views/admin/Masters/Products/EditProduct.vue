@@ -27,6 +27,9 @@
 
     data() {
       return {
+        id: this.$route.params.id,
+
+
         stock_details: [],
         size_attributes: [],
         size_selected: [],
@@ -48,7 +51,6 @@
         child_category_id: null,
         baseURL: baseURL,
         detail: {
-          id: this.$route.params.id,
           name: null,
           category_id: null,
           description: null,
@@ -59,11 +61,41 @@
       };
     },
     mounted() {
-      console.log("ID", this.detail);
-      this.getCategoryList(); // categories_list
-      this.getProductAttributeDetailsBuCategoryId(this.child_category_id ? this.child_category_id : this.subcategory_id); // categories_list
+      this.getProductDetailsById();
+
+
+      // this.getCategoryList();
+      // this.getProductAttributeDetailsBuCategoryId(this.child_category_id ? this.child_category_id : this.subcategory_id);
     },
     methods: {
+
+      /**
+       * Get Product Details By id
+       */
+      async getProductDetailsById(pid = null) {
+        let id = pid == null ? this.id : pid;
+
+        console.log("PID", id);
+
+        /** get product api */
+        let apiObject = this.$_.clone(ApiCollections.products_get);
+        apiObject.url += id;
+
+        let res = await Services.call(apiObject).get();
+
+        if (res && res.success) {
+          /** get all data here */
+
+
+
+        } else {
+          this.detail = {};
+        }
+
+        console.log("res", res);
+
+      },
+
 
       /**
        * Create Update Product
