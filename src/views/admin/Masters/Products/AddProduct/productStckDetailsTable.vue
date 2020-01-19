@@ -20,7 +20,7 @@
       <tbody>
       <tr :key="index" v-for="(stockList, index) in stock_details "> <!--stock_details-->
         <td>{{index + 1}}</td>
-        <td>
+        <td width="10%">
           <input
             class="form-control"
             disabled
@@ -29,7 +29,7 @@
             v-model="stockList.common_product_attribute_size_name"
           />
         </td>
-        <td>
+        <td width="10%">
           <input
             class="form-control"
             disabled
@@ -39,16 +39,14 @@
           />
         </td>
 
-        <td width="50%">
-
+        <td width="30%">
           <input @change="handleFileChange(index)" type="file"/>
           <br>
-          <div class="col-sm-12">
+          <!--          class="col-sm-12"-->
+          <div class="mt-2 ml-2 mr-2" >
             <img :key="imageIndex"
-                 class="img-thumbnail col-sm-2"
-                 style="min-height: 120px; min-width: 120px;
-max-height: 120px; max-width: 120px"
-
+                 class="img-thumbnail stock-img mr-2 mt-2"
+                 style=""
                  v-bind:alt="getFullImage(image)"
                  v-bind:src="getFullImage(image)"
                  v-for="(image, imageIndex) in stockList.images"
@@ -57,7 +55,7 @@ max-height: 120px; max-width: 120px"
           </div>
 
         </td>
-        <td>
+        <td width="10%">
           <input
             :name="'sale_price' + index "
             class="form-control"
@@ -75,7 +73,7 @@ max-height: 120px; max-width: 120px"
           </span>
           <!--            v-validate="'required'"-->
         </td>
-        <td>
+        <td width="10%">
           <input
             :name="'mrp_price' +index "
             class="form-control"
@@ -91,7 +89,7 @@ max-height: 120px; max-width: 120px"
           <span class="help-block" v-show="`mrp_price${index}`">{{ errors.first(`mrp_price${index}`) }}
           </span>
         </td>
-        <td>
+        <td width="10%">
           <input
             :name="'stock_available' +index "
             class="form-control"
@@ -170,7 +168,12 @@ max-height: 120px; max-width: 120px"
         }
       },
       getFullImage(filePath) {
-        return baseURL + filePath;
+        /** check if base url already in string */
+        if (filePath.search(baseURL) >= 0) {
+          return filePath
+        } else {
+          return baseURL + filePath;
+        }
       }
     },
   }
@@ -192,5 +195,12 @@ max-height: 120px; max-width: 120px"
   /* Don't forget to hide the original file input! */
   .file-select > input[type="file"] {
     display: none;
+  }
+
+  .stock-img {
+    min-height: 70px;
+    min-width: 70px;
+    max-height: 70px;
+    max-width: 70px;
   }
 </style>

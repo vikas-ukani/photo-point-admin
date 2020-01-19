@@ -1,4 +1,5 @@
-<template src="./AddProduct/addProductHTML.vue"/>
+<!--<template src="./AddProduct/addProductHTML.vue"/>-->
+<template src="./AddProduct/editProductHTML.vue"/>
 
 <script>
   /** Components Injection */
@@ -12,6 +13,7 @@
   import VueUploadMultipleImage from "vue-upload-multiple-image";
   import {Constants} from "../../../../constants/index";
   import {VueEditor} from "vue2-editor";
+  import _ from 'vue-underscore';
 
   export default {
     name: "EditProduct",
@@ -29,8 +31,7 @@
       return {
         id: this.$route.params.id,
 
-
-        stock_details: [],
+        stock_inventories: [],
         size_attributes: [],
         size_selected: [],
 
@@ -52,11 +53,12 @@
         baseURL: baseURL,
         detail: {
           name: null,
+          main_category_id: null,
+          sub_category_id: null,
           category_id: null,
           description: null,
           is_active: true,
-          // product_attributes: [],
-          stock_details: []
+          stock_inventories: []
         }
       };
     },
@@ -64,7 +66,12 @@
       this.getProductDetailsById();
 
 
-      // this.getCategoryList();
+      this.getCategoryList();
+
+      /** get subcategory list */
+      this.getCategoryListById(this.detail.main_category_id, 'subcategory_list');
+      this.getCategoryListById(this.detail.sub_category_id, 'child_category_list');
+
       // this.getProductAttributeDetailsBuCategoryId(this.child_category_id ? this.child_category_id : this.subcategory_id);
     },
     methods: {
@@ -75,7 +82,7 @@
       async getProductDetailsById(pid = null) {
         let id = pid == null ? this.id : pid;
 
-        console.log("PID", id);
+        // console.log("PID", id);
 
         /** get product api */
         let apiObject = this.$_.clone(ApiCollections.products_get);
@@ -85,14 +92,49 @@
 
         if (res && res.success) {
           /** get all data here */
+          let detail = res.data;
 
+          // if (this.main_category_id) this.detail.main_category_id = this.main_category_id;
+          // if (this.sub_category_id) this.detail.sub_category_id = this.sub_category_id;
+          // if (this.category_id) this.detail.category_id = this.category_id;
+          //
 
+          // this.detail = _.clone(detail);
 
+          this.detail.main_category_id = detail.main_category_id;
+          this.detail.sub_category_id = detail.sub_category_id;
+          this.detail.category_id = detail.category_id;
+          this.detail.name = detail.name;
+          this.detail.description = detail.description;
+          this.detail.is_active = detail.is_active;
+          this.detail.stock_inventories = detail.stock_inventories;
+
+          this.$_.each(this.detail.stock_inventories, (stock, index) => {
+
+            /** set size details */
+            if (stock && stock.common_product_attribute_size_detail && stock.common_product_attribute_size_detail.name) {
+              this.size_selected.push({
+                id: stock.common_product_attribute_size_detail.id,
+                name: stock.common_product_attribute_size_detail.name,
+                code: stock.common_product_attribute_size_detail.id
+              });
+              stock.common_product_attribute_size_name = stock.common_product_attribute_size_detail.name;
+            }
+
+            /** set color details */
+            if (stock && stock.common_product_attribute_color_detail && stock.common_product_attribute_color_detail.name) {
+              stock.common_product_attribute_color_name = stock.common_product_attribute_color_detail.name;
+              this.color_selected.push({
+                id: stock.common_product_attribute_color_detail.id,
+                name: stock.common_product_attribute_color_detail.name,
+                code: stock.common_product_attribute_color_detail.id
+              });
+            }
+          });
         } else {
           this.detail = {};
         }
-
-        console.log("res", res);
+        // console.log("res", res.data);
 
       },
 
@@ -102,10 +144,9 @@
        */
       async submitData() {
 
-        if (this.child_category_id) this.detail.category_id = this.child_category_id;
-        else if (this.subcategory_id) this.detail.category_id = this.subcategory_id;
-        else if (this.main_category_id) this.detail.category_id = this.main_category_id;
-
+        if (this.main_category_id) this.detail.main_category_id = this.main_category_id;
+        if (this.sub_category_id) this.detail.sub_category_id = this.sub_category_id;
+        if (this.category_id) this.detail.category_id = this.category_id;
 
         // let index;
         // let formData = new FormData();
@@ -134,7 +175,15 @@
         // }
 
 
+        this.$_.each(this.detail.stock_inventories, (stock, sindex) => {
+          this.$_.each(stock.images, (image, imgIndex) => {
+            image = image.replace(baseURL, '');
+            console.log("image", image)
+          });
+        });
         console.log("Final Detail this.detail", this.detail);
+
+        return false;
 
         this.$Progress.start();
         if (this.detail && this.detail.id) {
@@ -187,7 +236,7 @@
               description: null,
               is_active: true,
               // product_attributes: [],
-              stock_details: []
+              stock_inventories: []
             };
 
             /** redirect to home page */
@@ -203,7 +252,7 @@
       getAttributeOptionsForSelection(details) {
         if (details) {
           let options = [];
-          _.each(details, function (list, index) {
+          this.$_.each(details, function (list, index) {
             if (list) {
               options.push({value: list.id, text: list.name});
             }
@@ -225,7 +274,7 @@
       },
       // select option from parent component
       selectFromParentComponent() {
-        this.items = _.unionWith(this.items, [this.options[0]], _.isEqual);
+        this.items = this.$_.unionWith(this.items, [this.options[0]], _.isEqual);
       },
 
       async getCategoryList() {
@@ -236,7 +285,7 @@
         if (res && res.success === true) {
           let category_list = res.data.list;
           // this.category_list = res.data.list;
-          _.each(category_list, (list, index) => {
+          this.$_.each(category_list, (list, index) => {
             this.category_list.push({value: list.id, text: list.name});
           });
         } else {
@@ -256,7 +305,7 @@
         if (res && res.success === true) {
           let category_list = res.data.list;
 
-          _.each(category_list, (list, index) => {
+          this.$_.each(category_list, (list, index) => {
             this[varName].push({value: list.id, text: list.name});
           });
         } else {
@@ -290,7 +339,7 @@
 
           let sizes = [];
 
-          _.each(attributes_list, (list, index) => {
+          this.$_.each(attributes_list, (list, index) => {
             /** get size array */
             if (list.code === Constants.SIZE_NAME) {
               let data = this.getAttributesSelectionData(
@@ -310,7 +359,7 @@
       },
       getAttributesSelectionData(details) {
         let allData = [];
-        _.each(details, (subList, index) => {
+        this.$_.each(details, (subList, index) => {
           allData.push({
             id: subList.id,
             name: subList.name,
@@ -351,36 +400,44 @@
       },
       makeStockInputDetails: function () {
         /** make stock details records */
-
         let stockDetail = [];
         // let stockDetail = [...this.color_selected, this.size_selected];
 
-        _.each(this.size_selected, (size, index) => {
-          _.each(this.color_selected, (color, index) => {
-            stockDetail.push({
+        console.log("this.detail.stock_inventories", this.detail.stock_inventories);
+        this.$_.each(this.size_selected, (size, s_index) => {
+          this.$_.each(this.color_selected, (color, i) => {
+
+            let index = this.$_.findIndex(this.detail.stock_inventories, {
               common_product_attribute_size_id: size.id,
-              common_product_attribute_size_name: size.name,
-              common_product_attribute_color_id: color.id,
-              common_product_attribute_color_name: color.name,
-              images: []
+              common_product_attribute_color_id: color.id
             });
+
+            /** if index not found then create new empty record */
+            if (index === -1) {
+              this.detail.stock_inventories.push({
+                common_product_attribute_size_id: size.id,
+                common_product_attribute_size_name: size.name,
+                common_product_attribute_color_id: color.id,
+                common_product_attribute_color_name: color.name,
+                images: []
+              })
+            }
           });
         });
-        this.detail.stock_details = stockDetail;
       },
       removeItemFromStockDetails(index) {
-        this.detail.stock_details.splice(index, 1);
+        this.detail.stock_inventories.splice(index, 1);
       }
     },
     watch: {
-      main_category_id(newVal) {
+      'detail.main_category_id'(newVal) {
         /** clear first sub and child category */
         this.subcategory_list = [];
         this.child_category_list = [];
         this.subcategory_id = undefined;
         this.getCategoryListById(parseInt(newVal), "subcategory_list");
       },
-      subcategory_id(newVal) {
+      'detail.sub_category_id'(newVal) {
         this.child_category_id = undefined;
         this.getCategoryListById(parseInt(newVal), "child_category_list");
 
@@ -388,7 +445,7 @@
           this.getProductAttributeDetailsBuCategoryId(parseInt(newVal));
         }
       },
-      child_category_id(val) {
+      'detail.category_id'(val) {
         this.getProductAttributeDetailsBuCategoryId(parseInt(val));
       }
     }

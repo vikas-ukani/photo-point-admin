@@ -18,31 +18,33 @@
             </div>
 
             <div class="mb-3 col-md-4">
-              <!--              <pre>{{main_category_id}}</pre>-->
+<!--              <pre>{{detail.main_category_id}}</pre>-->
               <label class="text-capitalize">
                 Main Category
                 <small
-                  :class="!detail.name || errors.has('name') ? 'text-danger' : 'text-success' "
+                  :class="!detail.main_category_id || errors.has('main_category_id') ? 'text-danger' : 'text-success' "
                 >*</small>
               </label>
               <!-- <a
                 class="pull-right"
-                @click="main_category_id = undefined; subcategory_list = [];child_category_list = [] "
+                @click="detail.main_category_id = undefined; subcategory_list = [];child_category_list = [] "
               >
                 <i class="fa fa-times text-danger"></i>
               </a>-->
-              <!-- {{main_category_id}} -->
+              <!-- {{detail.main_category_id}} -->
               <model-select
+                name="main_category_id"
                 :options="category_list"
                 @change="getCategoryListById(detail.main_category_id, 'subcategory_list')"
-                name="main_category_id"
                 placeholder="Select Main category"
                 v-model="detail.main_category_id"
               />
             </div>
 
             <div class="mb-3 col-md-4">
-              <div v-if="subcategory_list && subcategory_list.length">
+<!--              v-if="subcategory_list && subcategory_list.length"-->
+              <div >
+<!--                <pre>{{subcategory_id}}</pre>-->
                 <label class="text-capitalize">
                   Subcategory
                   <small
@@ -50,24 +52,25 @@
                   >*</small>
                 </label>
                 <model-select
-                  :options="subcategory_list"
                   name="sub_category_id"
+                  :options="subcategory_list"
                   placeholder="Select Sub category"
                   v-model="detail.sub_category_id"
                 />
               </div>
             </div>
-            <div class="mb-3 col-md-4">
-              <div v-if="detail.sub_category_id && child_category_list.length">
-                <label class="text-capitalize">
+
+            <div class="mb-3 col-md-4" v-if="child_category_list && child_category_list.length">
+              <div > <!--v-if="subcategory_id && child_category_list.length"-->
+                 <label class="text-capitalize">
                   child category
                   <small
                     :class="!detail.category_id || errors.has('category_id') ? 'text-danger' : 'text-success' "
                   >*</small>
                 </label>
                 <model-select
-                  :options="child_category_list"
                   name="category_id"
+                  :options="child_category_list"
                   placeholder="Select child category"
                   v-model="detail.category_id"
                 />
@@ -75,7 +78,8 @@
             </div>
           </div>
 
-          <div class="input-group col-12 mt-3 border-top pt-3" id="sticky-reference" v-if="detail.category_id">
+<!--          v-if="child_category_id"-->
+          <div class="input-group col-12 mt-3 border-top pt-3" id="sticky-reference" >
             <div class="mb-3 col-md-12 font-dark pl-0">
               <h5 class="font-weight-bolder">Step 2: Product Information.</h5>
             </div>
@@ -110,7 +114,8 @@
             </div>
           </div>
 
-          <div class="input-group col-12 mt-3 border-top pt-3" v-if="detail.category_id">
+<!--          v-if="child_category_id"-->
+          <div class="input-group col-12 mt-3 border-top pt-3" >
             <div class="mb-3 col-md-12 font-dark pl-0">
               <h5 class="font-weight-bolder">Step 3: Product attributes</h5>
             </div>
@@ -170,22 +175,19 @@
             </div>
           </div>
 
-          <!--          v-if="category_id"-->
-          <div class="input-group col-12 mt-3 border-top pt-3">
+<!--          v-if="child_category_id"-->
+          <div class="input-group col-12 mt-3 border-top pt-3" >
             <div class="mb-3 col-md-12 font-dark pl-0">
               <h5 class="font-weight-bolder">Step 4: Product Stock Details</h5>
               <span class="text-danger ml-2 mb-0 font-weight-bold font-italic">Select product attributes first,</span>
             </div>
-            <div
-              class="pb-2 border-dark mb-4 col-12"
-
-            >
-              <!--              v-if="detail.stock_details.length "-->
-              <ProductStockDetailsTable :stock_details="detail.stock_details"/>
+            <div class="pb-2 border-dark mb-4 col-12" >
+<!--              v-if="detail.stock_inventories.length "-->
+               <ProductStockDetailsTable :stock_details="detail.stock_inventories"/>
             </div>
           </div>
 
-          <div class="input-group col-12 mt-3 border-top pt-3" v-if="detail.category_id">
+          <div class="input-group col-12 mt-3 border-top pt-3" v-if="child_category_id">
             <h5 class="mb-3">Description</h5>
             <div class="pb-2 border-dark mb-4 col-12">
               <vue-editor id="editor" v-model="detail.description"/>
@@ -193,24 +195,24 @@
           </div>
 
 
-          <div class="input-group col-12 mt-3 pt-3 pb-5" v-if="detail.category_id">
-            <!--            <div class="input-group">-->
-            <!--              <label class="text-capitalize ml-3" for="image">Image</label>-->
-            <!--              <div class="input-group mb-3 col-md-12">-->
-            <!--                <div class="input-group pull-left">-->
-            <!--                  <vue-upload-multiple-image-->
-            <!--                    :data-images="detail.images"-->
-            <!--                    @before-remove="beforeRemove"-->
-            <!--                    @edit-image="editImage"-->
-            <!--                    @upload-success="uploadImageSuccess"-->
-            <!--                    browseText="Select Product Images"-->
-            <!--                    dragText="Browse Image"-->
-            <!--                    popupText="Uploaded Image"-->
-            <!--                    primaryText="Image"-->
-            <!--                  />-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--            </div>-->
+          <div class="input-group col-12 mt-3 pt-3 pb-5"> <!--  v-if="child_category_id" -->
+<!--            <div class="input-group">-->
+<!--              <label class="text-capitalize ml-3" for="image">Image</label>-->
+<!--              <div class="input-group mb-3 col-md-12">-->
+<!--                <div class="input-group pull-left">-->
+<!--                  <vue-upload-multiple-image-->
+<!--                    :data-images="detail.images"-->
+<!--                    @before-remove="beforeRemove"-->
+<!--                    @edit-image="editImage"-->
+<!--                    @upload-success="uploadImageSuccess"-->
+<!--                    browseText="Select Product Images"-->
+<!--                    dragText="Browse Image"-->
+<!--                    popupText="Uploaded Image"-->
+<!--                    primaryText="Image"-->
+<!--                  />-->
+<!--                </div>-->
+<!--              </div>-->
+<!--            </div>-->
             <div class="input-group mb-3">
               <label class="text-capitalize ml-3" for="name">Active</label>
               <div class="input-group col-md-12">
@@ -230,7 +232,8 @@
           </pre>
 
 
-          <div class="col-12" v-if="detail.category_id">
+<!--          v-if="child_category_id"-->
+          <div class="col-12" >
             <div class="pull-right">
               <button @click="clearAllData()" class="btn btn-danger mr-2" type="button">Cancel</button>
               <button

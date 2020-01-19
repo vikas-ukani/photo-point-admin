@@ -42,24 +42,27 @@
         sku_details: [{}],
 
         items: [],
-
+        /* main_category_id: null,
+                subcategory_id: null,
+                child_category_id: null,*/
         main_category_id: null,
-        subcategory_id: null,
-        child_category_id: null,
+        sub_category_id: null,
+        category_id: null,
         baseURL: baseURL,
         detail: {
           name: "",
-          category_id: "",
+          main_category_id: null,
+          sub_category_id: null,
+          category_id: null,
           description: null,
           is_active: true,
-          // product_attributes: [],
           stock_details: []
         }
       };
     },
     mounted() {
       this.getCategoryList(); // categories_list
-      this.getProductAttributeDetailsBuCategoryId(this.child_category_id ? this.child_category_id : this.subcategory_id); // categories_list
+      this.getProductAttributeDetailsBuCategoryId(this.category_id ? this.category_id : this.sub_category_id); // categories_list
     },
     methods: {
 
@@ -67,11 +70,9 @@
        * Create Update Product
        */
       async submitData() {
-
-        if (this.child_category_id) this.detail.category_id = this.child_category_id;
-        else if (this.subcategory_id) this.detail.category_id = this.subcategory_id;
-        else if (this.main_category_id) this.detail.category_id = this.main_category_id;
-
+        if (this.main_category_id) this.detail.main_category_id = this.main_category_id;
+        if (this.sub_category_id) this.detail.sub_category_id = this.sub_category_id;
+        if (this.category_id) this.detail.category_id = this.category_id;
 
         // let index;
         // let formData = new FormData();
@@ -339,22 +340,22 @@
       }
     },
     watch: {
-      main_category_id(newVal) {
+      'detail.main_category_id'(newVal) {
         /** clear first sub and child category */
         this.subcategory_list = [];
         this.child_category_list = [];
-        this.subcategory_id = undefined;
+        this.detail.sub_category_id = undefined;
         this.getCategoryListById(parseInt(newVal), "subcategory_list");
       },
-      subcategory_id(newVal) {
-        this.child_category_id = undefined;
+      'detail.sub_category_id'(newVal) {
+        this.detail.category_id = undefined;
         this.getCategoryListById(parseInt(newVal), "child_category_list");
 
         if (!this.subcategory_list || this.subcategory_list.length) {
           this.getProductAttributeDetailsBuCategoryId(parseInt(newVal));
         }
       },
-      child_category_id(val) {
+      'detail.category_id'(val) {
         this.getProductAttributeDetailsBuCategoryId(parseInt(val));
       }
     }

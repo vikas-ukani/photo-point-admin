@@ -4,7 +4,7 @@ import 'core-js/es6/promise'
 import 'core-js/es6/string'
 import 'core-js/es7/array'
 // import cssVars from 'css-vars-ponyfill'
-import Vue from 'vue'
+import Vue from 'vue';
 // require("./Services/filters-directives")
 // import "./Services/filters-directives";
 
@@ -52,8 +52,8 @@ Vue.use(VueSweetalert2);
 import VueRouter from 'vue-router';
 Vue.use(VueRouter);
 
-import Underscore from 'vue-underscore';
-Vue.use(Underscore);
+import underscore from 'vue-underscore';
+Vue.use(underscore);
 import VeeValidate from "vee-validate";
 Vue.use(VeeValidate);
 

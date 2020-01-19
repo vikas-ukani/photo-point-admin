@@ -80,14 +80,12 @@ max-height: 120px; max-width: 120px"
                 </span>
             </td>
             <td>
-
-                <router-link
-                             :to="'/edit-product/' + list.id"
-                             class="text-primary p-0"
-                             v-b-tooltip.hover.left="'Edit ' + list.name">
-                  <i class="fa fa-edit"/>
-                </router-link>
-
+              <router-link
+                :to="'/edit-product/' + list.id"
+                class="text-primary p-0"
+                v-b-tooltip.hover.left="'Edit ' + list.name">
+                <i class="fa fa-edit"/>
+              </router-link>
               <!--              <a-->
               <!--                @click="getDetails(list.id)"      -->
               <!--                class="text-primary p-0"-->
