@@ -113,22 +113,42 @@
 
             /** set size details */
             if (stock && stock.common_product_attribute_size_detail && stock.common_product_attribute_size_detail.name) {
-              this.size_selected.push({
-                id: stock.common_product_attribute_size_detail.id,
-                name: stock.common_product_attribute_size_detail.name,
-                code: stock.common_product_attribute_size_detail.id
-              });
+              let indexofselected = this.$_.findIndex(this.size_selected, {
+                  id: stock.common_product_attribute_size_detail.id,
+                  // name: stock.common_product_attribute_size_detail.name,
+                  // code: stock.common_product_attribute_size_detail.id
+                }
+              );
+              /** -1 means no data found then push */
+              if (indexofselected === -1) {
+                this.size_selected.push({
+                  id: stock.common_product_attribute_size_detail.id,
+                  name: stock.common_product_attribute_size_detail.name,
+                  code: stock.common_product_attribute_size_detail.id
+                });
+              }
               stock.common_product_attribute_size_name = stock.common_product_attribute_size_detail.name;
             }
 
             /** set color details */
             if (stock && stock.common_product_attribute_color_detail && stock.common_product_attribute_color_detail.name) {
+
+              let indexofselected = this.$_.findIndex(this.color_selected, {
+                  id: stock.common_product_attribute_color_detail.id,
+                  // name: stock.common_product_attribute_size_detail.name,
+                  // code: stock.common_product_attribute_size_detail.id
+                }
+              );
+              /** -1 means no data found then push */
+              if (indexofselected === -1) {
+                this.color_selected.push({
+                  id: stock.common_product_attribute_color_detail.id,
+                  name: stock.common_product_attribute_color_detail.name,
+                  code: stock.common_product_attribute_color_detail.id
+                });
+              }
               stock.common_product_attribute_color_name = stock.common_product_attribute_color_detail.name;
-              this.color_selected.push({
-                id: stock.common_product_attribute_color_detail.id,
-                name: stock.common_product_attribute_color_detail.name,
-                code: stock.common_product_attribute_color_detail.id
-              });
+
             }
           });
         } else {
@@ -148,103 +168,45 @@
         if (this.sub_category_id) this.detail.sub_category_id = this.sub_category_id;
         if (this.category_id) this.detail.category_id = this.category_id;
 
-        // let index;
-        // let formData = new FormData();
-        // if (this.detail.images && this.detail.images.length) {
-        //   /** start  */
-        //   for (let i = 0; i < this.detail.images.length; i++) {
-        //     let file = this.detail.images[i];
-        //     index = file.path.search("data:image");
-        //     if (index >= 0) {
-        //       let arr = file.path.split(",");
-        //       console.log("Arr 1", i, arr);
-        //
-        //       let mime = arr[0].match(/:(.*?);/)[1];
-        //       let bstr = atob(arr[1]);
-        //       let n = bstr.length;
-        //       let u8arr = new Uint8Array(n);
-        //       while (n--) {
-        //         u8arr[n] = bstr.charCodeAt(n);
-        //       }
-        //       formData.append(
-        //         "images[]",
-        //         new File([u8arr], file.name, {type: mime})
-        //       );
-        //     }
-        //   }
-        // }
-
-
-        this.$_.each(this.detail.stock_inventories, (stock, sindex) => {
+        this.$_.each(this.detail.stock_inventories, (stock, s_index) => {
           this.$_.each(stock.images, (image, imgIndex) => {
-            image = image.replace(baseURL, '');
-            console.log("image", image)
+            if (image && image.length) {
+              let index = image.search(baseURL);
+              if (index >= 0) {
+                stock.images[s_index] = image.replace(baseURL, '');
+              } else {
+                stock.images[s_index] = image;
+              }
+            }
           });
         });
-        console.log("Final Detail this.detail", this.detail);
-
-        return false;
 
         this.$Progress.start();
-        if (this.detail && this.detail.id) {
-          let apiObject = this.$_.clone(ApiCollections.products_update);
-          apiObject.url += this.detail.id;
+        let apiObject = this.$_.clone(ApiCollections.products_update);
+        apiObject.url += this.id ? this.id : this.detail.id;
+        let res = await Services.call(apiObject).post(this.detail);
+        /** set update data  */
+        if (res && res.success && res.success === true) {
 
-          let res = await Services.call(apiObject).post(formData);
+          /** stop loader */
+          this.$Progress.finish();
 
-          /** set update data  */
-          if (res && res.success && res.success === true) {
-            index = this.$_.findIndex(this.lists, {
-              id: this.detail.id
-            });
+          Services.notify("s", res.message);
+          this.$router.push({ name: 'Products' });
+          // this.$router.go("products");
 
-            /** stop loader */
-            this.$Progress.finish();
-            if (index === -1) {
-              Services.notify("e", "Record not found in listing");
-              return false;
-            }
-            // this.lists.slice(index, 1, this.$_.clone(res.data));
-
-            this.lists[index] = this.$_.clone(res.data);
-            console.log("Updated Record", res.data, this.lists[index]);
-
-            Services.notify("s", res.message);
-            this.showModal = false;
-            this.detail = {};
-          } else {
-            this.$Progress.fail();
-            Services.notify("e", res.message);
-          }
+          // this.showModal = false;
+          /** no need to clear data */
+          // this.detail = {
+          //   name: null,
+          //   category_id: null,
+          //   description: null,
+          //   is_active: true,
+          //   stock_inventories: []
+          // };
         } else {
-          /** create data */
-          let res = await Services.call(ApiCollections.products_create).post(
-            this.detail
-          );
-          /** set data  */
-          if (res && res.success && res.success === true) {
-            console.log("Create Success", res.data);
-            // this.lists.unshift(res.data);
-            // this.totalCount++;
-            this.$Progress.finish();
-            Services.notify("s", res.message);
-
-            /** clear data */
-            this.detail = {
-              name: null,
-              category_id: null,
-              description: null,
-              is_active: true,
-              // product_attributes: [],
-              stock_inventories: []
-            };
-
-            /** redirect to home page */
-          } else {
-            console.log("Create Error", res.data);
-            this.$Progress.fail();
-            Services.notify("e", res.message);
-          }
+          this.$Progress.fail();
+          Services.notify("e", res.message);
         }
       },
 
@@ -402,8 +364,6 @@
         /** make stock details records */
         let stockDetail = [];
         // let stockDetail = [...this.color_selected, this.size_selected];
-
-        console.log("this.detail.stock_inventories", this.detail.stock_inventories);
         this.$_.each(this.size_selected, (size, s_index) => {
           this.$_.each(this.color_selected, (color, i) => {
 

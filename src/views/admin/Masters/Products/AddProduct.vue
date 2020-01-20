@@ -27,7 +27,7 @@
 
     data() {
       return {
-        stock_details: [],
+        stock_inventories: [],
         size_attributes: [],
         size_selected: [],
 
@@ -56,7 +56,7 @@
           category_id: null,
           description: null,
           is_active: true,
-          stock_details: []
+          stock_inventories: []
         }
       };
     },
@@ -154,7 +154,7 @@
               description: null,
               is_active: true,
               // product_attributes: [],
-              stock_details: []
+              stock_inventories: []
             };
 
             /** redirect to home page */
@@ -333,10 +333,10 @@
             });
           });
         });
-        this.detail.stock_details = stockDetail;
+        this.detail.stock_inventories = stockDetail;
       },
       removeItemFromStockDetails(index) {
-        this.detail.stock_details.splice(index, 1);
+        this.detail.stock_inventories.splice(index, 1);
       }
     },
     watch: {

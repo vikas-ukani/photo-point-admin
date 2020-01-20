@@ -181,9 +181,10 @@
               <h5 class="font-weight-bolder">Step 4: Product Stock Details</h5>
               <span class="text-danger ml-2 mb-0 font-weight-bold font-italic">Select product attributes first,</span>
             </div>
+<!--            <pre>{{detail.stock_inventories}}</pre>-->
             <div class="pb-2 border-dark mb-4 col-12" >
 <!--              v-if="detail.stock_inventories.length "-->
-               <ProductStockDetailsTable :stock_details="detail.stock_inventories"/>
+               <ProductStockDetailsTable :stock_inventories="detail.stock_inventories"/>
             </div>
           </div>
 
@@ -227,9 +228,9 @@
             </div>
           </div>
 
-          <pre>
-            {{detail }}
-          </pre>
+<!--          <pre>-->
+<!--            {{detail }}-->
+<!--          </pre>-->
 
 
 <!--          v-if="child_category_id"-->

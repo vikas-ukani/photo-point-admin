@@ -180,8 +180,8 @@
               class="pb-2 border-dark mb-4 col-12"
 
             >
-              <!--              v-if="detail.stock_details.length "-->
-              <ProductStockDetailsTable :stock_details="detail.stock_details"/>
+              <!--              v-if="detail.stock_inventories.length "-->
+              <ProductStockDetailsTable :stock_inventories="detail.stock_inventories"/>
             </div>
           </div>
 

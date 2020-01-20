@@ -2,7 +2,7 @@
 <template>
   <div>
 
-    <!--    v-if="stock_details.length "-->
+    <!--    v-if="stock_inventories.length "-->
     <table class="table table-hover">
       <thead>
       <tr>
@@ -18,7 +18,7 @@
       </thead>
 
       <tbody>
-      <tr :key="index" v-for="(stockList, index) in stock_details "> <!--stock_details-->
+      <tr :key="index" v-for="(stockList, index) in stock_inventories "> <!--stock_inventories-->
         <td>{{index + 1}}</td>
         <td width="10%">
           <input
@@ -132,7 +132,7 @@
       // ImageUploadComponent
     },
 
-    props: ['stock_details'],
+    props: ['stock_inventories'],
     data() {
       return {
         file: null,
@@ -160,10 +160,10 @@
         );
         /** set data  */
         if (res && res.success && res.success === true) {
-          if (this.stock_details[index].images && this.stock_details[index].images.length) {
-            this.stock_details[index].images.push(res.data);
+          if (this.stock_inventories[index].images && this.stock_inventories[index].images.length) {
+            this.stock_inventories[index].images.push(res.data);
           } else {
-            this.stock_details[index].images = [res.data];
+            this.stock_inventories[index].images = [res.data];
           }
         }
       },
