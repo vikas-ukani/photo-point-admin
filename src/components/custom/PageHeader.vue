@@ -57,7 +57,7 @@
             class="input-group-addon text-danger pointer-event input-group-text"
             type="button"
           >
-            <i class="fa fa-trash"/>
+            <i class="fa fa-trash "/>
           </button>
           <input
             class="form-control"

@@ -92,7 +92,7 @@
                         class="text-primary p-0"
                         v-b-tooltip.hover.left="'Edit ' + list.name"
                       >
-                        <i class="fa fa-edit"></i>
+                        <i class="fa fa-edit fa-2x"></i>
                       </a>
 
                       <a
@@ -100,7 +100,7 @@
                         class="link text-danger p-0 ml-1"
                         v-b-tooltip.hover.left="'Delete ' + list.name"
                       >
-                        <i class="fa fa-trash"/>
+                        <i class="fa fa-trash fa-2x"/>
                       </a>
                     </td>
                   </tr>

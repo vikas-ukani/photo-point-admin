@@ -41,6 +41,8 @@ const Page500 = () => import("@/views/pages/Page500");
 const Login = () => import("@/views/admin/auth/LoginComponent");
 // const Login = () => import('@/views/pages/Login')
 const Register = () => import("@/views/pages/Register");
+// const ShiporderLogin = () => import("@/views/admin/ShiporderLogin/Login");
+// require('@/views/admin/ShiporderLogin/Login')
 
 Vue.use(Router);
 
@@ -72,17 +74,6 @@ export default new Router({
       component: DefaultContainer,
       beforeEnter: ifAuthenticated,
       children: [
-        // {
-        //   path: 'dashboard-1',
-        //   name: 'Dashboard',
-        //   component: Dashboard,
-        //   beforeEnter: ifAuthenticated,
-        // },
-        // {
-        //   path: "dashboard",
-        //   name: "Dashboard",
-        //   component: Dashboard1
-        // },
         {
           path: "users",
           name: "Users",
@@ -94,7 +85,6 @@ export default new Router({
           component: Shopper,
           beforeEnter: ifAuthenticated
         },
-
         {
           path: "category",
           name: "Category",
@@ -121,6 +111,12 @@ export default new Router({
           beforeEnter: ifAuthenticated
         },
         {
+          path: "/shopper/products", // route_prefix +
+          name: "Products",
+          component: Products,
+          beforeEnter: ifAuthenticated
+        },
+        {
           path: "/add-product", // route_prefix +
           name: "AddProducts",
           component: AddProduct,
@@ -142,6 +138,12 @@ export default new Router({
           path: "/offers", // route_prefix +
           name: "Offers",
           component: Offers,
+          beforeEnter: ifAuthenticated
+        },
+        {
+          path: "/shiporder-login", // route_prefix +
+          name: "ShiporderLogin",
+          component: () => import("@/views/admin/ShiporderLogin/Login"),
           beforeEnter: ifAuthenticated
         },
         // {

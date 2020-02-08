@@ -16,9 +16,7 @@
             <div class="mb-3 col-md-12 font-dark">
               <h5 class="font-weight-bolder">Step 1: Select a category.</h5>
             </div>
-
             <div class="mb-3 col-md-4">
-              <!--              <pre>{{main_category_id}}</pre>-->
               <label class="text-capitalize">
                 Main Category
                 <small
@@ -40,7 +38,6 @@
                 v-model="detail.main_category_id"
               />
             </div>
-
             <div class="mb-3 col-md-4">
               <div v-if="subcategory_list && subcategory_list.length">
                 <label class="text-capitalize">
@@ -170,17 +167,12 @@
             </div>
           </div>
 
-          <!--          v-if="category_id"-->
           <div class="input-group col-12 mt-3 border-top pt-3">
             <div class="mb-3 col-md-12 font-dark pl-0">
               <h5 class="font-weight-bolder">Step 4: Product Stock Details</h5>
               <span class="text-danger ml-2 mb-0 font-weight-bold font-italic">Select product attributes first,</span>
             </div>
-            <div
-              class="pb-2 border-dark mb-4 col-12"
-
-            >
-              <!--              v-if="detail.stock_inventories.length "-->
+            <div class="pb-2 border-dark mb-4 col-12">
               <ProductStockDetailsTable :stock_inventories="detail.stock_inventories"/>
             </div>
           </div>
@@ -194,23 +186,6 @@
 
 
           <div class="input-group col-12 mt-3 pt-3 pb-5" v-if="detail.category_id">
-            <!--            <div class="input-group">-->
-            <!--              <label class="text-capitalize ml-3" for="image">Image</label>-->
-            <!--              <div class="input-group mb-3 col-md-12">-->
-            <!--                <div class="input-group pull-left">-->
-            <!--                  <vue-upload-multiple-image-->
-            <!--                    :data-images="detail.images"-->
-            <!--                    @before-remove="beforeRemove"-->
-            <!--                    @edit-image="editImage"-->
-            <!--                    @upload-success="uploadImageSuccess"-->
-            <!--                    browseText="Select Product Images"-->
-            <!--                    dragText="Browse Image"-->
-            <!--                    popupText="Uploaded Image"-->
-            <!--                    primaryText="Image"-->
-            <!--                  />-->
-            <!--                </div>-->
-            <!--              </div>-->
-            <!--            </div>-->
             <div class="input-group mb-3">
               <label class="text-capitalize ml-3" for="name">Active</label>
               <div class="input-group col-md-12">
@@ -224,10 +199,6 @@
               </div>
             </div>
           </div>
-
-          <pre>
-            {{detail }}
-          </pre>
 
 
           <div class="col-12" v-if="detail.category_id">

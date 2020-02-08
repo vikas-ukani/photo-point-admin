@@ -19,7 +19,7 @@ export default {
       }
     },
     {
-      name: "Shoppers",
+      name: "Shoppers User",
       url: "/shopper",
       icon: "icon-user",
       sequence: 5
@@ -48,22 +48,7 @@ export default {
       icon: "icon-directions",
       sequence: 15
     },
-    // {
-    //   name: "Orders",
-    //   url: "/orders",
-    //   icon: "icon-order",
-    //   sequence: 14
-    // },
-    // {
-    //   name: "Customers",
-    //   url: "/customer",
-    //   icon: "icon-user",
-    //   badge: {
-    //     variant: "info",
-    //     text: "NEW"
-    //   },
-    //   sequence: 14
-    // },
+
     {
       name: "Offers",
       url: "/offers",
@@ -81,28 +66,23 @@ export default {
       icon: "icon-location-pin",
       sequence: 20
     },
-    // {
-    //   title: true,
-    //   name: "Masters"
-    // },
-    // {
-    //   name: "Masters",
-    //   url: "/masters",
-    //   icon: "icon-list",
-    //   children: [
-    //     {
-    //       name: "Countries",
-    //       url: "/countries",
-    //       icon: "icon-location-pin",
-    //       sequence: 5
-    //     },
-    //     {
-    //       name: "Products",
-    //       url: "/products",
-    //       icon: "icon-directions",
-    //       sequence: 14
-    //     }
-    //   ]
-    // }
+
+    {
+      name: 'Setting',
+      // url: '/setting',
+      icon: 'icon-settings',
+      children: [
+        {
+          name: "Shiporder Login",
+          url: "/shiporder-login",
+          icon: "icon-lock",
+          sequence: 1,
+          // badge: {
+          // variant: 'primary',
+          // text: 'NEW'
+          // }
+        },
+      ]
+    },
   ]
 };

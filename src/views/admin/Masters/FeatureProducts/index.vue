@@ -100,7 +100,7 @@
                 class="text-primary p-0"
                 @click="getDetails(list.id)"
               >
-                <i class="fa fa-edit"/>
+                <i class="fa fa-edit fa-2x"/>
               </a>
 
               <a
@@ -108,7 +108,7 @@
                 class="link text-danger p-0 ml-1"
                 @click="deleteConfirmation(list)"
               >
-                <i class="fa fa-trash"></i>
+                <i class="fa fa-trash fa-2x"></i>
               </a>
             </td>
           </tr>

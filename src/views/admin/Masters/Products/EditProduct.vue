@@ -148,7 +148,6 @@
                 });
               }
               stock.common_product_attribute_color_name = stock.common_product_attribute_color_detail.name;
-
             }
           });
         } else {
@@ -157,7 +156,6 @@
         // console.log("res", res.data);
 
       },
-
 
       /**
        * Create Update Product
@@ -173,9 +171,9 @@
             if (image && image.length) {
               let index = image.search(baseURL);
               if (index >= 0) {
-                stock.images[s_index] = image.replace(baseURL, '');
+                stock.images[s_index][imgIndex] = image.replace(baseURL, '');
               } else {
-                stock.images[s_index] = image;
+                stock.images[s_index]['imgIndex'] = image;
               }
             }
           });

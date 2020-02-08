@@ -15,7 +15,7 @@
       <div class="card card-body" v-if="lists && lists.length">
         <table
           class="table table-hover table-responsive-sm col-lg-12 col-md-12 col-sm-12 col-xs-12"
-        > 
+        >
           <thead>
             <tr>
               <th nowrap>
@@ -66,14 +66,14 @@
                   class="text-primary p-0"
                   @click="getDetails(list.id)"
                 >
-                  <i class="fa fa-edit"></i>
+                  <i class="fa fa-edit fa-2x"></i>
                 </a>
                 <a
                   v-b-tooltip.hover.left="'Delete ' + list.name"
                   class="link text-danger p-0"
                   @click="deleteConfirmation(list)"
                 >
-                  <i class="fa fa-trash"></i>
+                  <i class="fa fa-trash fa-2x"></i>
                 </a>
               </td>
             </tr>
@@ -619,7 +619,7 @@ export default {
     }
   }
 };
-</script> 
+</script>
 
 <style scope="">
 .modal-mask {

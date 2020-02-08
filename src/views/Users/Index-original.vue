@@ -89,7 +89,7 @@
                   :to="{ name: 'Edit user', params: { id: list.id }}"
                   v-b-tooltip.hover.left="'Edit ' + list.name"
                 >
-                  <i class="fa fa-edit"></i>
+                  <i class="fa fa-edit fa-2x"></i>
                 </router-link>-->
                 <a
                   v-b-tooltip.hover.left="'Delete ' + list.name"
@@ -97,7 +97,7 @@
                   class="link text-danger p-0"
                   @click="deleteConfirmation(list)"
                 >
-                  <i class="fa fa-trash"></i>
+                  <i class="fa fa-trash fa-2x"></i>
                 </a>
               </td>
             </tr>

@@ -18,7 +18,7 @@
             </div>
 
             <div class="mb-3 col-md-4">
-<!--              <pre>{{detail.main_category_id}}</pre>-->
+
               <label class="text-capitalize">
                 Main Category
                 <small
@@ -44,7 +44,7 @@
             <div class="mb-3 col-md-4">
 <!--              v-if="subcategory_list && subcategory_list.length"-->
               <div >
-<!--                <pre>{{subcategory_id}}</pre>-->
+
                 <label class="text-capitalize">
                   Subcategory
                   <small
@@ -181,7 +181,7 @@
               <h5 class="font-weight-bolder">Step 4: Product Stock Details</h5>
               <span class="text-danger ml-2 mb-0 font-weight-bold font-italic">Select product attributes first,</span>
             </div>
-<!--            <pre>{{detail.stock_inventories}}</pre>-->
+
             <div class="pb-2 border-dark mb-4 col-12" >
 <!--              v-if="detail.stock_inventories.length "-->
                <ProductStockDetailsTable :stock_inventories="detail.stock_inventories"/>
@@ -227,11 +227,6 @@
               </div>
             </div>
           </div>
-
-<!--          <pre>-->
-<!--            {{detail }}-->
-<!--          </pre>-->
-
 
 <!--          v-if="child_category_id"-->
           <div class="col-12" >

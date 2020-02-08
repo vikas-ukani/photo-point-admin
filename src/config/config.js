@@ -19,8 +19,8 @@ export const default_route = route_prefix + dashboardURL;
 //   process.env.API_URL ||
 //   "http://127.0.0.1:8000";
 
-// export const baseURL = "http://localhost:1001";
-export const baseURL = "http://comedyclassroom.com";
+export const baseURL = "http://localhost:1001";
+// export const baseURL = "http://comedyclassroom.com";
 export const api_prefix = baseURL + route_prefix;
 
 /**
@@ -48,7 +48,6 @@ export const ApiCollections = {
 
   shopper_listing: {method: "GET", url: api_prefix + "shopper-list"},
   shopper_status_change: {method: "delete", url: api_prefix + "shopper-status-change"},
-
 
   users_listing: {method: "GET", url: api_prefix + "users-list"},
   getUserById: {method: "GET", url: api_prefix + "user/"},
