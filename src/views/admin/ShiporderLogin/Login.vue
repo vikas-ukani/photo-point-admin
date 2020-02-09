@@ -10,7 +10,7 @@
               <b-card no-body class="p-4">
                 <b-card-body>
                   <b-form>
-                    <h1>Login</h1>
+                    <h1>Shiporder Login</h1>
                     <p class="text-muted">Login at Shiporder</p>
                     <b-input-group class="mb-3">
                       <b-input-group-prepend>
@@ -66,24 +66,15 @@ export default {
   name: "ShiporderLogin",
   data() {
     return {
-      login: {}
+      login: {
+        email: "anildhameliya66@gmail.com",
+        password: "Hardik@123"
+      }
     };
   },
   methods: {
     async loginCall() {
       console.log("clicked", this.login);
-
-      // fetch(ShipOrderAPICollection.login.url, {
-      //   // Adding method type
-      //   method: "POST",
-      //   // Adding body or contents to send
-      //   body: JSON.stringify(this.login),
-      //   // Adding headers to the request
-      //   ...ShipOrderAPICollection.login.headers
-      // })
-      //   // Converting to JSON
-      //   .then(response => response.json())
-      //   .then(json => console.log("json", json));
 
       let res = await apiServices
         .call(ShipOrderAPICollection.login)
@@ -91,7 +82,11 @@ export default {
 
       console.log("res", res);
 
-      // if ( res && )
+      if (res && res.success === true) {
+        apiServices.notify("s", res.message);
+      } else {
+        apiServices.notify("e", res.message);
+      }
     }
   }
 };
