@@ -16,6 +16,7 @@ import Profile from "../views/admin/auth/Profile";
 /** Masters Components */
 import Countries from "../views/admin/Masters/Countries";
 import ComplaintCategories from "../views/admin/Masters/ComplaintCategories";
+import ApproveAddress from "../views/admin/Masters/ApproveAddress";
 import Products from "../views/admin/Masters/Products";
 import FeatureProducts from "../views/admin/Masters/FeatureProducts";
 import Offers from "../views/admin/Masters/Offers";
@@ -101,6 +102,12 @@ export default new Router({
           path: "/complaint-categories", // route_prefix +
           name: "Complaint Categories",
           component: ComplaintCategories,
+          beforeEnter: ifAuthenticated
+        },
+        {
+          path: "/approve-address", // route_prefix +
+          name: "Approve Address",
+          component: ApproveAddress,
           beforeEnter: ifAuthenticated
         },
 

@@ -98,6 +98,11 @@ export const ApiCollections = {
     url: api_prefix + "complaint-category-delete-multiple"
   },
 
+  /** shoppers pickup address */
+  pickup_address_listing: { method: "POST", url: api_prefix + "pickup-address-list" },
+  pickup_address_approve_status: { method: "POST", url: api_prefix + "pickup-address-approve" },
+
+
   /** Categories Apis */
   category_list: { method: "POST", url: api_prefix + "category-list" },
   category_create: { method: "POST", url: api_prefix + "category-create" },
@@ -157,9 +162,6 @@ export const ApiCollections = {
     method: "POST",
     url: api_prefix + "offers-status-change"
   }
-
-
-
 
 
 };

@@ -68,6 +68,13 @@ export default {
     },
 
     {
+      name: "Approve pickup address",
+      url: "/approve-address",
+      icon: "icon-location-pin",
+      sequence: 20
+    },
+
+    {
       name: 'Setting',
       // url: '/setting',
       icon: 'icon-settings',
